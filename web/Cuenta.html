@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Solidaria - Mi cuenta</title>
+    <link href="css/css.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+    <div class="header-left">
+        <a href="index.html" class="logo-link">
+    <img src="img/logo2.jpg" alt="Red Solidaria" class="logo">
+    <h1 class="brand-name">RED SOLIDARIA</h1>
+</a>
+
+    </div>
+    <div class="header-center">
+            <input type="text" class="search-bar buscar" placeholder="Buscar...">
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" id="settings-btn">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="icon-btn" id="notificationsBtn">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-btn" id="userBtn">
+                <i class="fas fa-user"></i>
+            </button>
+            <span class="username">Usuario</span>
+        </div>
+    </header>
+    
+    <!-- Menú de Notificaciones -->
+    <div id="notificationsDropdown" class="notifications-panel">
+        <h3 class="panel-title">Notificaciones</h3>
+        <div class="notification">
+            <button class="close-btn">&times;</button>
+            <p><strong>Te ha llegado una nueva solicitud</strong></p>
+            <p class="subtext">Usuario1 te ha hecho una solicitud</p>
+            <div class="notification-actions">
+                <button class="btn">Aceptar</button>
+                <button class="btn">Rechazar</button>
+            </div>
+        </div>
+        <div class="notification">
+            <button class="close-btn">&times;</button>
+            <p><strong>Título de la notificación</strong></p>
+            <p class="subtext">Descripción breve.</p>
+            <button class="btn">Desactivar</button>
+        </div>
+    </div>
+
+  
+<!-- Dropdown de usuario -->
+<div class="user-dropdown" id="userDropdown">
+    <div class="user-info">
+        <img src="img/usuario.jpg" alt="Usuario">
+        <div class="user-details">
+            <h3>Usuario</h3>
+            <p>Correo electrónico</p>
+            <a href="perfil.html" class="view-profile-btn">Ver perfil</a>
+        </div>
+    </div>
+    <ul class="user-menu">
+        <li><a href="#" id="bankLink">Banco Solidario</a></li>
+        <li><a href="#" id="transactionsLink">Transacciones</a></li>
+        <li><a href="#" id="reportsLink">Reportes y Denuncias</a></li>
+    </ul>
+    <button class="logout-btn" onclick="showLogoutConfirm()">Cerrar Sesión</button>
+</div>
+    
+
+    
+<!-- Modal de confirmación de cerrar sesión -->
+<div class="modal logout-confirm" id="logoutConfirm">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeLogoutConfirm()">×</span>
+        <h2>¿Estás seguro?</h2>
+        <button class="btn" onclick="logout()">Aceptar</button>
+    </div>
+</div>
+
+<!-- Mensaje de sesión cerrada (puede ser un modal temporal) -->
+<div class="modal logout-message" id="logoutMessage">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeLogoutMessage()">×</span>
+        <h2>Sesión cerrada</h2>
+        <p>Tu sesión se ha cerrado correctamente. Vuelve pronto.</p>
+        <button class="btn" onclick="closeLogoutMessage()">Aceptar</button>
+    </div>
+</div>
+
+<!-- Modal de Transacciones -->
+<div id="transactionsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModalById('transactionsModal')">×</span>
+        <h2>Transacciones</h2>
+        <div class="transaction-details">
+            <div class="transaction-field">
+                <label>Servicio</label>
+                <input type="text" id="transactionService" placeholder="Nombre del servicio" readonly>
+            </div>
+            <div class="transaction-field">
+                <label>Descripción</label>
+                <textarea id="transactionDescription" placeholder="Descripción del servicio" readonly></textarea>
+            </div>
+            <div class="transaction-field">
+                <label>Horas intercambiadas <i class="fas fa-clock"></i></label>
+                <input type="number" id="transactionHours" placeholder="000 horas" readonly>
+            </div>
+            <div class="transaction-field">
+                <label>Calificación</label>
+                <div id="transactionRating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Banco Solidario -->
+<div id="bankModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModalById('bankModal')">×</span>
+        <h2>Banco Solidario</h2>
+        <div class="bank-details">
+            <div class="bank-field">
+                <label>Mis horas</label>
+                <input type="text" id="bankHours" value="000 horas" readonly>
+            </div>
+            <div class="bank-field">
+                <label>Horas ofrecidas</label>
+                <input type="text" id="offeredHours" value="000 horas" readonly>
+            </div>
+            <div class="bank-field">
+                <label>Horas utilizadas</label>
+                <input type="text" id="usedHours" value="000 horas" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Reportes y Denuncias -->
+<div id="reportsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModalById('reportsModal')">×</span>
+        <h2>Reportes y Denuncias</h2>
+        <form id="reportForm" class="report-details">
+            <div class="report-field">
+                <label for="reportReason">Motivo *</label>
+                <textarea id="reportReason" name="reportReason" required placeholder="Describe el motivo de tu reporte o denuncia"></textarea>
+            </div>
+            <div class="report-field">
+                <label for="reportUser">Usuario *</label>
+                <input type="text" id="reportUser" name="reportUser" required placeholder="Nombre o ID del usuario">
+            </div>
+            <button type="submit" class="btn">Enviar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Chat -->
+<div id="chatModal" class="modal">
+    <div class="modal-content chat-modal">
+        <span class="close-btn" onclick="closeModalById('chatModal')">×</span>
+        <div class="chat-header">
+            <h2>Chat</h2>
+            <input type="text" class="search-chat" placeholder="Buscar chat">
+        </div>
+        <div class="chat-tabs">
+            <button class="tab active" data-tab="todos">Todos</button>
+            <button class="tab" data-tab="no-leidos">No leídos</button>
+            <button class="tab" data-tab="favoritos">Favoritos</button>
+        </div>
+        <div class="chat-list">
+            <!-- Ejemplo de chats -->
+            <div class="chat-item" data-user="Nombre de usuario">
+                <img src="img/usuario.jpg" alt="Usuario" class="user-avatar">
+                <div class="chat-details">
+                    <p class="user-name">Nombre de usuario</p>
+                    <p class="last-message">Último mensaje</p>
+                </div>
+                <span class="chat-time">00:00 00/00</span>
+                <div class="chat-actions">
+                    <button class="block-btn">Bloquear</button>
+                    <button class="report-btn">Reportar</button>
+                </div>
+            </div>
+            <!-- Más chats pueden añadirse dinámicamente -->
+        </div>
+        <div class="chat-window" style="display: none;">
+            <div class="chat-header-user">
+                <img src="img/usuario.jpg" alt="Usuario" class="user-avatar">
+                <div class="chat-user-details">
+                    <p class="user-name">Nombre de usuario</p>
+                </div>
+            </div>
+            <div class="chat-messages">
+                <!-- Mensajes se añadirán dinámicamente -->
+                <div class="message sent">Contenido del mensaje</div>
+                <div class="message received">Contenido del mensaje</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" class="message-input" placeholder="Escribe un mensaje...">
+                <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <main class="account-main">
+            <h1>MI CUENTA</h1>
+                <div class="privacy-toggle">
+                    <span>Público <input type="radio" name="privacy" id="public" checked></span>
+                    <span>Privado <input type="radio" name="privacy" id="private"></span>
+                </div>               
+                <div class="profile-photo">
+                    <div class="photo-circle"></div>
+                    <div class="photo-actions">
+                        <button class="action-btn">Quitar la foto</button>
+                        <button class="action-btn">Cambiar la foto</button>
+                    </div>
+                </div>
+            <div class="info-section">
+                    <label>Nombre</label>
+                    <input type="text" value="usuario" readonly>
+                    
+                    <label>Correo electrónico</label>
+                    <input type="email" value="correo" readonly>
+          
+                    <label>Contraseña</label>
+                    <input type="password" value="contraseña">
+                
+                    <label>Ubicación</label>
+                 
+                        <select>
+                            <option value="">Selecciona un país</option>
+                        </select>
+                        <select>
+                            <option value="">Selecciona un estado</option>
+                        </select>
+                    
+                    <button class="edit-btn">Editar</button>
+                </div>
+        </main>
+        <button class="chat-btn"><i class="fas fa-comments"></i></button>
+
+        <footer>
+            <p>Copyright 2025 | Privacidad | Condiciones de uso</p>
+        </footer>
+
+        <script src="js/modal.js" type="text/javascript"></script>
+    </body>
+</html>

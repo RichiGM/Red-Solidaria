@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Solidaria - Perfil de Usuario</title>
+    <link rel="stylesheet" href="css/css.css"> <!-- Ajusta la ruta según tu estructura -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo-link">
+                <img src="img/logo2.jpg" alt="Red Solidaria" class="logo">
+                <span class="brand-name">RED SOLIDARIA</span> <!-- Cambiado h1 a span por semántica -->
+            </a>
+        </div>
+        <div class="header-center">
+            <input type="text" class="search-bar buscar" placeholder="Buscar...">
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" id="settings-btn">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="icon-btn" onclick="openModal('notificationsModal')">
+                <i class="fas fa-bell"></i>
+            </button>
+            <div class="usuario" onclick="openModal('userModal')">
+                <button class="icon-btn">
+                    <i class="fas fa-user"></i>
+                </button>
+                <span class="username">Usuario</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Sección del perfil -->
+        <div class="profile-header">
+            <div class="profile-pic"></div>
+            <div class="profile-info">
+                <h2>Nombre de usuario</h2>
+                <p>correo@ejemplo.com</p>
+            </div>
+        </div>
+
+        <!-- Barra de búsqueda y acciones -->
+        <div class="search-bar">
+            <div class="usuario">
+                <img src="img/usuario.jpg" alt="Foto de usuario">
+            </div>
+            <input type="text" class="service-input" placeholder="Anuncia un nuevo servicio" onclick="openModal('serviceModal')">
+            <button class="stats-btn" onclick="openModal('statsModal')">Estadísticas</button>
+        </div>
+
+        <!-- Sección de cards (izquierda y derecha) -->
+        <div class="profile-section">
+            <div class="left-column">
+                <div class="profile-card">
+                    <h3>Descripción del perfil</h3>
+                    <p>Descripción</p>
+                    <h3>Calificación</h3>
+                    <span class="stars">★★★★★</span>
+                </div>
+            </div>
+            <div class="right-column">
+                <div class="service-card">
+                    <button class="edit-icon" onclick="openModal('serviceModal')"><i class="fas fa-edit"></i></button>
+                    <div class="modal-header">
+                        <i class="fas fa-user"></i>
+                        <h2>Nombre de usuario</h2>
+                    </div>
+                    <div class="service-content">
+                        <label>Nombre del servicio</label>
+                        <input type="text" value="Nombre del servicio" readonly>
+                        <label>Descripción</label>
+                        <input type="text" value="Descripción" readonly>
+                        <label>Habilidades requeridas</label>
+                        <input type="text" value="Habilidades" readonly>
+                        <label>Tipo de servicio</label>
+                        <select>
+                            <option value="virtual">Virtual</option>
+                            <option value="presencial">Presencial</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright 2025 | Privacidad | Condiciones de uso</p>
+    </footer>
+
+    <!-- Modal para el servicio -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content service-modal">
+            <span class="close" onclick="closeModal('serviceModal')">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-user"></i>
+                <h2>Nombre de usuario</h2>
+            </div>
+            <form class="service-form">
+                <label>Nombre del servicio</label>
+                <input type="text" placeholder="Nombre del servicio">
+                <label>Descripción</label>
+                <input type="text" placeholder="Descripción">
+                <label>Habilidades requeridas</label>
+                <input type="text" placeholder="Habilidades">
+                <label>Tipo de servicio</label>
+                <select>
+                    <option value="" disabled selected>Selecciona un tipo</option>
+                    <option value="virtual">Virtual</option>
+                    <option value="presencial">Presencial</option>
+                </select>
+                <div class="profile-actions">
+                    <button type="button" class="btn">Eliminar</button>
+                    <button type="submit" class="btn">Guardar</button>
+                    <button type="button" class="btn" onclick="closeModal('serviceModal')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para estadísticas -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content stats-modal">
+            <span class="close" onclick="closeModal('statsModal')">&times;</span>
+            <h2>Estadísticas</h2>
+            <p>Contenido de estadísticas aquí (puedes personalizarlo).</p>
+            <!-- Agrega más contenido de estadísticas según necesites -->
+        </div>
+    </div>
+
+    <!-- Script para modales (debes crearlo o incluirlo) -->
+    <script src="js/modal.js" type="text/javascript"></script>
+</body>
+</html>

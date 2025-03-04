@@ -1,0 +1,143 @@
+/* 
+    Created on : Mar 1, 2025, 9:10:47 PM
+    Author     : arleth
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo {
+    margin-bottom: 20px;
+}
+
+.logo img {
+    width: 100px; /* Adjust based on your logo size */
+    height: auto;
+}
+
+.container h2 {
+    color: #000000;
+    font-size: 24px;
+    margin-bottom: 10%;
+    font-weight: bold;
+}
+
+.description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+form .form-group {
+    text-align: left;
+}
+
+label {
+    display: block;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 5%;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+    padding: 8px;
+    margin-bottom: 0.5%;
+    border: 1px solid #B2E3B5;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 96%;
+    margin-bottom: 5%;
+}
+
+select {
+    padding: 8px;
+    margin-bottom: 0.5%;
+    border: 1px solid #B2E3B5;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 98%;
+    margin-bottom: 5%;
+    appearance: none; /* Remove default arrow in some browsers */
+    background: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
+    background-size: 20px;
+}
+
+.password-requirements,
+.requirements {
+    font-size: 12px;
+    color: #666;
+    text-align: left;
+    margin-top: 5px;
+    padding-left: 15px;
+}
+
+.password-requirements li,
+.requirements li {
+    margin-bottom: 5px;
+}
+
+.btn {
+    background: #78C091; /* Green button */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #B2E3B5; /* Darker green on hover */
+}
+
+.back-link {
+    display: block;
+    color: #006400; /* Dark green color */
+    text-decoration: none;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+}
