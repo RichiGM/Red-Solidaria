@@ -1,23 +1,104 @@
+// modal.js
+const BASE_URL = "http://localhost:8080/RedSolidaria/api";
+
 // Funciones específicas para el modal de login
 function openModal() {
     const modal = document.getElementById("loginModal");
-    if (modal) modal.style.display = "flex"; // Cambiado a 'flex' para centrar
+    if (modal) {
+        modal.style.display = "flex"; // Usamos flex para centrar el modal
+        modal.classList.add("modal-open"); // Agregamos clase para animaciones (si aplica)
+    }
 }
 
 function closeModal() {
     const modal = document.getElementById("loginModal");
-    if (modal) modal.style.display = "none";
+    if (modal) {
+        modal.style.display = "none";
+        modal.classList.remove("modal-open");
+    }
 }
 
 // Funciones genéricas para abrir y cerrar modales
 function openModalById(modalId) {
     const modal = document.getElementById(modalId);
-    if (modal) modal.style.display = "flex"; // Cambiado a 'flex' para centrar
+    if (modal) {
+        modal.style.display = "flex";
+        modal.classList.add("modal-open");
+    }
 }
 
 function closeModalById(modalId) {
     const modal = document.getElementById(modalId);
-    if (modal) modal.style.display = "none"; // Oculta el modal
+    if (modal) {
+        modal.style.display = "none";
+        modal.classList.remove("modal-open");
+    }
+}
+
+// Función para manejar el login
+function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    fetch(`${BASE_URL}/usuario/login?correo=${email}&contrasena=${password}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.idUsuario) {
+                localStorage.setItem("usuario", JSON.stringify(data));
+                closeModal();
+                window.location.href = "principal.html";
+            } else {
+                alert("Credenciales incorrectas");
+            }
+        })
+        .catch(error => {
+            console.error("Error al iniciar sesión:", error);
+            alert("Error al iniciar sesión");
+        });
+}
+
+// Función para manejar el registro de un nuevo usuario
+function handleRegistro(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const country = document.getElementById("country").value;
+    const state = document.getElementById("state").value;
+
+    const usuario = {
+        nombre: username,
+        apellidos: "",
+        correo: email,
+        contrasena: password,
+        idCiudad: parseInt(state),
+        configuracionPrivacidad: "publico",
+        preferenciasEmail: false,
+        idTipoUsuario: 1, // Tipo de usuario regular
+    };
+
+    fetch(`${BASE_URL}/usuario/registrar`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(usuario),
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data);
+            window.location.href = "registrado.html";
+        })
+        .catch(error => {
+            console.error("Error al registrar usuario:", error);
+            alert("Error al registrar usuario");
+        });
 }
 
 // Único evento DOMContentLoaded
@@ -37,30 +118,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const logoLink = document.querySelector(".logo-link");
     const verPerfil = document.querySelector("#verPerfil");
     const logoutBtn = document.querySelector(".logout-btn");
-    const loginBtn = document.querySelector(".login-btn"); // Agregado
+    const loginBtn = document.querySelector(".login-btn");
     const chatBtn = document.querySelector(".chat-btn");
+    const publishBtn = document.querySelector(".publish-service-btn");
 
-    // Intentar obtener el enlace de transacciones por ID, o usar un selector de respaldo
-    let transactionsLink = document.getElementById("transactionsLink");
-    if (!transactionsLink) {
-        transactionsLink = document.querySelector('.user-menu li a[href="#"]:nth-child(2)');
+    // Intentar obtener los enlaces del menú de usuario
+    let transactionsLink = document.getElementById("transactionsLink") || document.querySelector('.user-menu li a[href="#"]:nth-child(2)');
+    let bankLink = document.getElementById("bankLink") || document.querySelector('.user-menu li a[href="#"]:nth-child(1)');
+    let reportsLink = document.getElementById("reportsLink") || document.querySelector('.user-menu li a[href="#"]:nth-child(3)');
+
+    // Cargar datos del usuario al iniciar la página
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario) {
+        const usernameHeader = document.getElementById("usernameHeader");
+        const userName = document.getElementById("userName");
+        const userEmail = document.getElementById("userEmail");
+        const userPhoto = document.getElementById("userPhoto");
+        if (usernameHeader) usernameHeader.textContent = usuario.nombre;
+        if (userName) userName.textContent = usuario.nombre;
+        if (userEmail) userEmail.textContent = usuario.correo;
+        if (userPhoto && usuario.foto) userPhoto.src = usuario.foto;
     }
 
-    // Intentar obtener el enlace de Banco Solidario por ID, o usar un selector de respaldo
-    let bankLink = document.getElementById("bankLink");
-    if (!bankLink) {
-        bankLink = document.querySelector('.user-menu li a[href="#"]:nth-child(1)');
-    }
-
-    // Intentar obtener el enlace de Reportes y Denuncias por ID, o usar un selector de respaldo
-    let reportsLink = document.getElementById("reportsLink");
-    if (!reportsLink) {
-        reportsLink = document.querySelector('.user-menu li a[href="#"]:nth-child(3)');
-    }
-
-    // Agregar evento de clic para abrir el modal
+    // Agregar evento de clic para abrir el modal de login
     if (loginBtn) {
         loginBtn.addEventListener("click", openModal);
+    }
+
+    // Agregar evento de submit para el formulario de login
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", handleLogin);
+    }
+
+    // Agregar evento de submit para el formulario de registro
+    const registerForm = document.getElementById("registerForm");
+    if (registerForm) {
+        registerForm.addEventListener("submit", handleRegistro);
     }
 
     // Función para cerrar todos los menús/dropdowns
@@ -100,8 +194,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (notificationsBtn && notificationsMenu) {
         notificationsBtn.addEventListener("click", (event) => {
             event.stopPropagation();
-            notificationsMenu.style.display =
-                notificationsMenu.style.display === "block" ? "none" : "block";
+            notificationsMenu.style.display = notificationsMenu.style.display === "block" ? "none" : "block";
+            if (notificationsMenu.style.display === "block") {
+                loadNotifications();
+            }
         });
     }
 
@@ -159,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Cerrar modales con la "X" o al hacer clic fuera
+    // Cerrar modales al hacer clic fuera
     window.addEventListener("click", (event) => {
         document.querySelectorAll(".modal").forEach((modal) => {
             if (event.target === modal) closeModalById(modal.id);
@@ -183,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
         logoutBtn.addEventListener("click", () => openModalById("logoutConfirm"));
     }
 
-    if (transactionsLink) { // Manejar el clic en el enlace de transacciones
+    if (transactionsLink) {
         transactionsLink.addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -192,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    if (bankLink) { // Manejar el clic en el enlace de Banco Solidario
+    if (bankLink) {
         bankLink.addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -201,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    if (reportsLink) { // Manejar el clic en el enlace de Reportes y Denuncias
+    if (reportsLink) {
         reportsLink.addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -214,20 +310,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBtn.addEventListener("click", () => openModalById("chatModal"));
     }
 
-    // Funciones para manejar cerrar sesión
-    window.showLogoutConfirm = () => openModalById("logoutConfirm");
-    window.closeLogoutConfirm = () => closeModalById("logoutConfirm");
-    window.logout = () => {
-        closeLogoutConfirm();
-        openModalById("logoutMessage");
-    };
-    window.closeLogoutMessage = () => {
-        closeModalById("logoutMessage");
-        window.location.href = "index.html"; // Redirigir al login
-    };
-    
-    // Añadir esto dentro del evento DOMContentLoaded
-    const publishBtn = document.querySelector(".publish-service-btn");
     if (publishBtn) {
         publishBtn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -235,58 +317,169 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Manejar submit del formulario
-    document.getElementById("serviceForm")?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        // Aquí iría la lógica para guardar el servicio
-        closeModalById("serviceModal");
-    });
+    // Funciones para manejar cerrar sesión
+    window.showLogoutConfirm = () => openModalById("logoutConfirm");
+    window.closeLogoutConfirm = () => closeModalById("logoutConfirm");
+    window.logout = () => {
+        localStorage.removeItem("usuario");
+        closeLogoutConfirm();
+        openModalById("logoutMessage");
+    };
+    window.closeLogoutMessage = () => {
+        closeModalById("logoutMessage");
+        window.location.href = "index.html";
+    };
+
+    // Manejar submit del formulario de servicio
+    const serviceForm = document.getElementById("serviceForm");
+    if (serviceForm) {
+        serviceForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const usuario = JSON.parse(localStorage.getItem("usuario"));
+            if (!usuario) {
+                alert("Debes iniciar sesión para publicar un servicio");
+                return;
+            }
+
+            const servicio = {
+                titulo: document.getElementById("serviceTitle").value,
+                descripcion: document.getElementById("serviceDescription").value,
+                modalidad: document.getElementById("serviceType").value === "virtual" ? 2 : 1,
+                estatus: 1,
+                idUsuario: usuario.idUsuario,
+            };
+
+            fetch(`${BASE_URL}/servicio/publicar`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(servicio),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data);
+                    closeModalById("serviceModal");
+                    closeModalById("serviceModalpublic");
+                })
+                .catch(error => {
+                    console.error("Error al publicar servicio:", error);
+                    alert("Error al publicar servicio");
+                });
+        });
+    }
 
     // Manejar el envío del formulario de reportes
-    document.getElementById("reportForm")?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const reason = document.getElementById("reportReason").value;
-        const user = document.getElementById("reportUser").value;
-        
-        // Aquí puedes agregar la lógica para enviar el reporte/denuncia (por ejemplo, a una API o mostrar un mensaje)
-        console.log("Reporte enviado:", { reason, user });
-        
-        // Opcional: limpiar el formulario y cerrar el modal
-        document.getElementById("reportForm").reset();
-        closeModalById("reportsModal");
-    });
+    const reportForm = document.getElementById("reportForm");
+    if (reportForm) {
+        reportForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const usuario = JSON.parse(localStorage.getItem("usuario"));
+            if (!usuario) {
+                alert("Debes iniciar sesión para reportar una denuncia");
+                return;
+            }
+
+            const denuncia = {
+                motivo: document.getElementById("reportReason").value,
+                descripcion: document.getElementById("reportReason").value,
+                idUsuarioDenunciante: usuario.idUsuario,
+                idUsuarioReportado: parseInt(document.getElementById("reportUser").value),
+                estatus: 0,
+            };
+
+            fetch(`${BASE_URL}/denuncia/reportar`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(denuncia),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data);
+                    reportForm.reset();
+                    closeModalById("reportsModal");
+                })
+                .catch(error => {
+                    console.error("Error al reportar denuncia:", error);
+                    alert("Error al reportar denuncia");
+                });
+        });
+    }
+
+    // Cargar notificaciones
+    function loadNotifications() {
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+        if (!usuario) return;
+
+        fetch(`${BASE_URL}/notificacion/usuario/${usuario.idUsuario}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => response.json())
+            .then(notificaciones => {
+                const notificationsList = document.getElementById("notificationsList");
+                if (notificationsList) {
+                    notificationsList.innerHTML = "";
+                    notificaciones.forEach(notificacion => {
+                        const notificationDiv = document.createElement("div");
+                        notificationDiv.className = "notification";
+                        notificationDiv.innerHTML = `
+                            <button class="close-btn">×</button>
+                            <p><strong>${notificacion.tipo}</strong></p>
+                            <p class="subtext">${notificacion.contenido}</p>
+                            <div class="notification-actions">
+                                <button class="btn">Aceptar</button>
+                                <button class="btn">Rechazar</button>
+                            </div>
+                        `;
+                        notificationsList.appendChild(notificationDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error al cargar notificaciones:", error);
+            });
+    }
 
     // Manejar pestañas del chat
     const tabs = document.querySelectorAll(".tab");
     const chatList = document.querySelector(".chat-list");
+    const chatWindow = document.querySelector(".chat-window");
     tabs.forEach(tab => {
         tab.addEventListener("click", () => {
             tabs.forEach(t => t.classList.remove("active"));
             tab.classList.add("active");
             const tabContent = tab.getAttribute("data-tab");
-            // Aquí puedes filtrar la lista de chats según la pestaña (todos, no leídos, favoritos)
             console.log(`Cambiando a pestaña: ${tabContent}`);
+            // Aquí puedes agregar lógica para filtrar chats según la pestaña (todos, no leídos, favoritos)
         });
     });
 
     // Abrir ventana de chat al hacer clic en un chat-item
+    let currentChatUser = null;
     const chatItems = document.querySelectorAll(".chat-item");
-    const chatWindow = document.querySelector(".chat-window");
     chatItems.forEach(item => {
         item.addEventListener("click", () => {
-            chatList.style.display = "none";
-            chatWindow.style.display = "flex";
+            if (chatList) chatList.style.display = "none";
+            if (chatWindow) chatWindow.style.display = "flex";
+            const userId = item.getAttribute("data-user-id");
             const userName = item.getAttribute("data-user");
+            currentChatUser = { id: userId, name: userName };
             document.querySelector(".chat-user-details .user-name").textContent = userName;
+            loadMessages(userId);
         });
     });
 
     // Cerrar ventana de chat y volver a la lista
-    const closeChat = document.querySelector(".close-btn");
+    const closeChat = document.querySelector(".chat-header-user .close-btn");
     if (closeChat) {
         closeChat.addEventListener("click", () => {
-            chatWindow.style.display = "none";
-            chatList.style.display = "block";
+            if (chatWindow) chatWindow.style.display = "none";
+            if (chatList) chatList.style.display = "block";
         });
     }
 
@@ -297,15 +490,40 @@ document.addEventListener("DOMContentLoaded", function () {
     if (sendBtn && messageInput) {
         sendBtn.addEventListener("click", () => {
             const messageText = messageInput.value.trim();
-            if (messageText) {
-                const messageDiv = document.createElement("div");
-                messageDiv.classList.add("message", "sent");
-                messageDiv.textContent = messageText;
-                chatMessages.appendChild(messageDiv);
-                messageInput.value = "";
-                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll al final
+            if (messageText && currentChatUser) {
+                const usuario = JSON.parse(localStorage.getItem("usuario"));
+                const mensaje = {
+                    contenido: messageText,
+                    tipoContenido: 1,
+                    fechaEnvio: new Date().toISOString().split("T")[0],
+                    estatus: 0,
+                    idRemitente: usuario.idUsuario,
+                    idDestinatario: currentChatUser.id,
+                };
+
+                fetch(`${BASE_URL}/mensaje/enviar`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(mensaje),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const messageDiv = document.createElement("div");
+                        messageDiv.className = "message sent";
+                        messageDiv.textContent = messageText;
+                        chatMessages.appendChild(messageDiv);
+                        messageInput.value = "";
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    })
+                    .catch(error => {
+                        console.error("Error al enviar mensaje:", error);
+                        alert("Error al enviar mensaje");
+                    });
             }
         });
+
         messageInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -314,20 +532,51 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Bloquear y reportar usuarios (funcionalidad básica)
+    // Cargar mensajes de un chat
+    function loadMessages(userId) {
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+        if (!usuario) return;
+
+        fetch(`${BASE_URL}/mensaje/conversacion/${usuario.idUsuario}/${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => response.json())
+            .then(mensajes => {
+                if (chatMessages) {
+                    chatMessages.innerHTML = "";
+                    mensajes.forEach(mensaje => {
+                        const messageDiv = document.createElement("div");
+                        messageDiv.className = mensaje.idRemitente === usuario.idUsuario ? "message sent" : "message received";
+                        messageDiv.textContent = mensaje.contenido;
+                        chatMessages.appendChild(messageDiv);
+                    });
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            })
+            .catch(error => {
+                console.error("Error al cargar mensajes:", error);
+            });
+    }
+
+    // Bloquear y reportar usuarios
     document.querySelectorAll(".block-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
             const userName = btn.closest(".chat-item").getAttribute("data-user");
             console.log(`Usuario ${userName} bloqueado`);
-            // Lógica para bloquear usuario
+            // Aquí puedes agregar lógica para bloquear al usuario
         });
     });
 
     document.querySelectorAll(".report-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
             const userName = btn.closest(".chat-item").getAttribute("data-user");
             console.log(`Reporte enviado para ${userName}`);
-            // Lógica para reportar usuario
+            // Aquí puedes agregar lógica para reportar al usuario
         });
     });
 });
