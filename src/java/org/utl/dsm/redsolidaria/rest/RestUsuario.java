@@ -54,80 +54,21 @@ public class RestUsuario {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al registrar usuario: " + e.getMessage()).build();
         }
     }
-
-//    // Iniciar sesión
-//    @POST
-//    @Path("/login")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response login(@QueryParam("correo") String correo, @QueryParam("contrasena") String contrasena) {
-//        try {
-//            Usuario usuario = usuarioController.login(correo, contrasena);
-//            if (usuario != null) {
-//                return Response.ok(gson.toJson(usuario)).build(); // Convertir objeto Usuario a JSON
-//            } else {
-//                return Response.status(Response.Status.UNAUTHORIZED).entity("Credenciales incorrectas").build();
-//            }
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al iniciar sesión: " + e.getMessage()).build();
-//        }
-//    }
-//
-//    // Obtener un usuario por ID
-//    @GET
-//    @Path("/{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getUsuario(@PathParam("id") int id) {
-//        try {
-//            Usuario usuario = usuarioController.getUsuarioById(id);
-//            if (usuario != null) {
-//                return Response.ok(gson.toJson(usuario)).build(); // Convertir objeto Usuario a JSON
-//            } else {
-//                return Response.status(Response.Status.NOT_FOUND).entity("Usuario no encontrado").build();
-//            }
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al obtener usuario: " + e.getMessage()).build();
-//        }
-//    }
-//
-//    // Actualizar un usuario
-//    @PUT
-//    @Path("/actualizar")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response actualizarUsuario(String usuarioJson) {
-//        try {
-//            Usuario usuario = gson.fromJson(usuarioJson, Usuario.class); // Convertir JSON a objeto Usuario
-//            usuarioController.actualizarUsuario(usuario);
-//            return Response.ok("Usuario actualizado exitosamente").build();
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al actualizar usuario: " + e.getMessage()).build();
-//        }
-//    }
-//
-//    // Eliminar un usuario
-//    @DELETE
-//    @Path("/eliminar/{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response eliminarUsuario(@PathParam("id") int id) {
-//        try {
-//            usuarioController.eliminarUsuario(id);
-//            return Response.ok("Usuario eliminado exitosamente").build();
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al eliminar usuario: " + e.getMessage()).build();
-//        }
-//    }
-//
-//    // Obtener todos los usuarios
-//    @GET
-//    @Path("/todos")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getTodosUsuarios() {
-//        try {
-//            List<Usuario> usuarios = usuarioController.getTodosUsuarios();
-//            return Response.ok(gson.toJson(usuarios)).build(); // Convertir lista de usuarios a JSON
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al obtener usuarios: " + e.getMessage()).build();
-//        }
-//    }
+    
+    // Modificar un usuario
+@PUT
+@Path("/modificar")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response modificarUsuario(String usuarioJson) {
+    try {
+        Usuario usuario = gson.fromJson(usuarioJson, Usuario.class); // Convertir JSON a objeto Usuario
+        usuarioController.modificarUsuario(usuario);
+        return Response.ok("Usuario modificado exitosamente").build();
+    } catch (Exception e) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al modificar usuario: " + e.getMessage()).build();
+    }
+}
+    
+    
 }

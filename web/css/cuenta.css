@@ -1,136 +1,66 @@
-/* 
-    Created on : Mar 1, 2025, 9:10:47 PM
-    Author     : arleth
-*/
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* Asegura que el padding y el borde no afecten el ancho total */
-    font-family: Arial, sans-serif;
+/* Estilos para la fila del formulario */
+.form-row {
+    display: flex; /* Usar flexbox para la distribución en columnas */
+    justify-content: space-between; /* Espacio entre columnas */
+    flex-wrap: wrap; /* Permitir que las columnas se envuelvan si es necesario */
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f5f5f5;
+/* Estilos para las columnas del formulario */
+.form-column {
+    flex: 1; /* Cada columna ocupa el mismo espacio */
+    min-width: 300px; /* Ancho mínimo para cada columna */
+    margin-right: 20px; /* Espaciado entre columnas */
 }
 
-.container {
-    background-color: white;
-    padding: 30px; /* Reduce el padding para hacer el contenedor más compacto */
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px; /* Mantiene un ancho máximo */
-    text-align: center;
+/* Eliminar margen derecho en la última columna */
+.form-column:last-child {
+    margin-right: 0;
 }
 
-.logo {
-    margin-bottom: 20px;
+/* Asegurarse de que los inputs y textareas ocupen el 100% de su columna */
+.info-section input[type="text"],
+.info-section input[type="email"],
+.info-section input[type="password"],
+.info-section select,
+.info-section textarea {
+    width: 100%; /* Ancho completo */
+    box-sizing: border-box; /* Incluye padding y border en el ancho total */
 }
 
-.logo img {
-    width: 100px; /* Ajusta según el tamaño de tu logo */
-    height: auto;
+/* Estilos para el botón de cambiar contraseña */
+#changePasswordBtn {
+    background-color: #007bff; /* Color de fondo azul */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
 }
 
-.container h2 {
-    color: #000000;
-    font-size: 20px; /* Reduce el tamaño del título */
-    margin-bottom: 15px; /* Reduce el margen inferior */
-    font-weight: bold;
+/* Efecto al pasar el mouse sobre el botón de cambiar contraseña */
+#changePasswordBtn:hover {
+    background-color: #0056b3; /* Color de fondo más oscuro al pasar el mouse */
 }
 
-.description {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 10px; /* Reduce el margen inferior */
-    line-height: 1.5;
+/* Estilos para el botón de cancelar */
+#cancelChangeBtn {
+    background-color: #dc3545; /* Color de fondo rojo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 4px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+    margin-left: 10px; /* Espaciado a la izquierda */
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Reduce el espacio entre los elementos del formulario */
+/* Efecto al pasar el mouse sobre el botón de cancelar */
+#cancelChangeBtn:hover {
+    background-color: #c82333; /* Color de fondo más oscuro al pasar el mouse */
 }
 
-form .form-group {
-    text-align: left;
-}
-
-label {
-    display: block;
-    color: #333;
-    font-size: 14px;
-    margin-bottom: 5px; /* Reduce el margen inferior */
-}
-
-input[type="email"],
-input[type="text"],
-input[type="password"],
-select {
-    padding: 10px; /* Aumenta el padding para mejorar la usabilidad */
-    border: 1px solid #B2E3B5;
-    border-radius: 5px;
-    font-size: 14px;
-    width: 100%; /* Asegura que los campos ocupen todo el ancho */
-}
-
-select {
-    appearance: none; /* Elimina la flecha predeterminada en algunos navegadores */
-    background: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
-    background-size: 20px;
-}
-
-.password-requirements,
-.requirements {
-    font-size: 12px;
-    color: #666;
-    text-align: left;
-    margin-top: 5px;
-}
-
-.btn {
-    background: #78C091; /* Botón verde */
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.btn:hover {
-    background-color: #B2E3B5; /* Verde más oscuro al pasar el mouse */
-}
-
-.back-link {
-    display: block;
-    color: #006400; /* Color verde oscuro */
-    text-decoration: none;
-    font-size: 14px;
-    margin-top: 10px;
-    text-align: center;
-}
-
-.back-link:hover {
-    text-decoration: underline;
-}
-
-/* Responsive design */
-@media (max-width: 480px) {
-    .container {
-        margin: 20px;
-        padding: 20px;
-    }
-}
-
-.error {
-    color: red;
-    font-size: 10px; /* Tamaño de letra más pequeño */
-    margin-top: 5px;
+/* Estilos para el contenedor de nueva contraseña */
+#newPasswordContainer {
+    margin-top: 15px; /* Espaciado superior */
 }
