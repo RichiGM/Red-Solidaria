@@ -1,13 +1,3 @@
-// script.js
-
-// Función para abrir el modal de servicio
-function openServiceModal() {
-    const modal = document.getElementById("serviceModal");
-    if (modal) {
-        modal.style.display = "flex"; // Usamos flex para centrar el modal
-        modal.classList.add("modal-open"); // Agregamos clase para animaciones (si aplica)
-    }
-}
 
 // Función para cerrar el modal
 function closeModalById(modalId) {

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Red Solidaria - Mis Servicios</title>
+        <link href="css/css.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    </head>
+    <body>
+        <div id="header-container"></div>
+        
+        <main class="account-main">
+            <h1>MIS SERVICIOS</h1>
+            <button class="edit-btn" id="addServiceBtn">Agregar Servicio</button>
+            
+            <!-- Modal para agregar servicio (sin estatus) -->
+            <div id="addServiceModal" class="modal">
+                <div class="modal-content service-modal">
+                    <span class="close-btn" onclick="closeModalById('addServiceModal')">×</span>
+                    <h2>Agregar Nuevo Servicio</h2>
+                    <form id="addServiceForm" class="service-form">
+                        <label for="serviceTitle">Título *</label>
+                        <input type="text" id="serviceTitle" required>
+
+                        <label for="serviceDescription">Descripción *</label>
+                        <textarea id="serviceDescription" required></textarea>
+
+                        <label for="serviceModality">Modalidad *</label>
+                        <select id="serviceModality" required>
+                            <option value="">Seleccione una modalidad</option>
+                            <option value="virtual">Virtual</option>
+                            <option value="presencial">Presencial</option>
+                        </select>
+
+                        <button type="submit" class="btn">Guardar Servicio</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal para editar servicio (con estatus) -->
+            <div id="editServiceModal" class="modal">
+                <div class="modal-content service-modal">
+                    <span class="close-btn" onclick="closeModalById('editServiceModal')">×</span>
+                    <h2>Editar Servicio</h2>
+                    <form id="editServiceForm" class="service-form">
+                        <input type="hidden" id="editServiceId">
+                        <label for="editServiceTitle">Título *</label>
+                        <input type="text" id="editServiceTitle" required>
+
+                        <label for="editServiceDescription">Descripción *</label>
+                        <textarea id="editServiceDescription" required></textarea>
+
+                        <label for="editServiceModality">Modalidad *</label>
+                        <select id="editServiceModality" required>
+                            <option value="">Seleccione una modalidad</option>
+                            <option value="virtual">Virtual</option>
+                            <option value="presencial">Presencial</option>
+                        </select>
+
+                        <label for="editServiceStatus">Estatus *</label>
+                        <select id="editServiceStatus" required>
+                            <option value="">Seleccione un estatus</option>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+
+                        <button type="submit" class="btn">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sección para mostrar los servicios (con estatus) -->
+            <div class="services-list" id="servicesList">
+                <!-- Los servicios se añadirán dinámicamente aquí con JS -->
+                <div class="service-card">
+                    <h3>Ejemplo de Servicio</h3>
+                    <p><label>Título:</label> Servicio de Prueba</p>
+                    <p><label>Descripción:</label> Este es un servicio de ejemplo.</p>
+                    <p><label>Modalidad:</label> Virtual</p>
+                    <p><label>Estatus:</label> Activo</p>
+                    <button class="edit-icon"><i class="fas fa-edit"></i></button>
+                </div>
+                <!-- Más servicios se añadirán vía API -->
+            </div>
+        </main>
+
+        <div id="footer-container"></div>
+        <script src="js/loaderComponents.js" type="text/javascript"></script>
+        <script src="js/misServicios.js" type="text/javascript"></script>
+    </body>
+</html>

@@ -1,10 +1,6 @@
 package org.utl.dsm.redsolidaria.rest;
 
-import org.utl.dsm.redsolidaria.model.Servicio;
-import org.utl.dsm.redsolidaria.controller.ControllerServicio;
-import jakarta.websocket.server.PathParam;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -13,81 +9,75 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import com.google.gson.Gson;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.utl.dsm.redsolidaria.model.Servicio;
+import org.utl.dsm.redsolidaria.controller.ControllerServicio;
 
 @Path("/servicio")
 public class RestServicio {
 
     private final ControllerServicio servicioController = new ControllerServicio();
+    private final Gson gson = new Gson();
 
-    // Crear un nuevo servicio
     @POST
-    @Path("/publicar")
+    @Path("/agregar")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response publicarServicio(Servicio servicio) {
+    public Response agregarServicio(String servicioJson) {
         try {
-            servicioController.publicarServicio(servicio);
-            return Response.status(Response.Status.CREATED).entity("Servicio publicado exitosamente").build();
+            Servicio servicio = gson.fromJson(servicioJson, Servicio.class);
+            servicioController.agregarServicio(servicio);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Servicio agregado exitosamente");
+            String jsonResponse = gson.toJson(response);
+            return Response.status(Response.Status.CREATED).entity(jsonResponse).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al publicar servicio: " + e.getMessage()).build();
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al agregar el servicio: " + e.getMessage());
+            String jsonError = gson.toJson(errorResponse);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
 
-    // Obtener un servicio por ID
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getServicio(@PathParam("id") int id) {
-        try {
-            Servicio servicio = servicioController.getServicioById(id);
-            if (servicio != null) {
-                return Response.ok(servicio).build();
-            } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("Servicio no encontrado").build();
-            }
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al obtener servicio: " + e.getMessage()).build();
-        }
-    }
-
-    // Actualizar un servicio
     @PUT
-    @Path("/actualizar")
+    @Path("/modificar")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response actualizarServicio(Servicio servicio) {
+    public Response modificarServicio(String servicioJson) {
         try {
-            servicioController.actualizarServicio(servicio);
-            return Response.ok("Servicio actualizado exitosamente").build();
+            Servicio servicio = gson.fromJson(servicioJson, Servicio.class);
+            servicioController.modificarServicio(servicio);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Servicio modificado exitosamente");
+            String jsonResponse = gson.toJson(response);
+            return Response.ok(jsonResponse).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al actualizar servicio: " + e.getMessage()).build();
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al modificar el servicio: " + e.getMessage());
+            String jsonError = gson.toJson(errorResponse);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
 
-    // Eliminar un servicio
-    @DELETE
-    @Path("/eliminar/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response eliminarServicio(@PathParam("id") int id) {
-        try {
-            servicioController.eliminarServicio(id);
-            return Response.ok("Servicio eliminado exitosamente").build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al eliminar servicio: " + e.getMessage()).build();
-        }
-    }
-
-    // Obtener todos los servicios
     @GET
-    @Path("/todos")
+    @Path("/mis-servicios")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTodosServicios() {
+    public Response obtenerMisServicios(@QueryParam("idUsuario") int idUsuario) {
         try {
-            List<Servicio> servicios = servicioController.getTodosServicios();
-            return Response.ok(servicios).build();
+            List<Servicio> servicios = servicioController.obtenerMisServicios(idUsuario);
+            String jsonResponse = gson.toJson(servicios);
+            return Response.ok(jsonResponse).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al obtener servicios: " + e.getMessage()).build();
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al obtener los servicios: " + e.getMessage());
+            String jsonError = gson.toJson(errorResponse);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
 }

@@ -45,8 +45,8 @@ function handleLogin(e) {
             // Almacenar el correo y el token en localStorage
             localStorage.setItem("correo", loginEmail);
             localStorage.setItem("lastToken", data.token);
-            localStorage.setItem("nombre", data.nombre);
-            localStorage.setItem("apellidos", data.apellidos); 
+            localStorage.setItem("username", data.username);
+
 
             // Mostrar éxito
             Swal.fire({

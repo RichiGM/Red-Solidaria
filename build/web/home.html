@@ -9,65 +9,6 @@
     </head>
     <body>
         <div id="header-container"></div>
-        <!-- Modal para crear servicio -->
-        <div id="serviceModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeModalById('serviceModal')">×</span>
-                <h2>Publicar nuevo servicio</h2>
-                <form class="service-form" id="serviceForm">
-                    <label for="serviceTitle">Título *</label>
-                    <input type="text" id="serviceTitle" required>
-
-                    <label for="serviceDescription">Descripción *</label>
-                    <textarea id="serviceDescription" required></textarea>
-
-                    <label for="serviceSkills">Habilidades requeridas *</label>
-                    <input type="text" id="serviceSkills" required>
-
-                    <label for="serviceAvailability">Disponibilidad *</label>
-                    <input type="text" id="serviceAvailability" required>
-
-                    <label for="serviceType">Modalidad *</label>
-                    <select id="serviceType" required>
-                        <option value="virtual">Virtual</option>
-                        <option value="presencial">Presencial</option>
-                    </select>
-
-                    <button type="submit" class="btn">Publicar servicio</button>
-                </form>
-            </div>
-        </div>
-        <!-- Modal de Transacciones -->
-        <div id="transactionsModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeModalById('transactionsModal')">×</span>
-                <h2>Transacciones</h2>
-                <div class="transaction-details">
-                    <div class="transaction-field">
-                        <label>Servicio</label>
-                        <input type="text" id="transactionService" placeholder="Nombre del servicio" readonly>
-                    </div>
-                    <div class="transaction-field">
-                        <label>Descripción</label>
-                        <textarea id="transactionDescription" placeholder="Descripción del servicio" readonly></textarea>
-                    </div>
-                    <div class="transaction-field">
-                        <label>Horas intercambiadas <i class="fas fa-clock"></i></label>
-                        <input type="number" id="transactionHours" placeholder="000 horas" readonly>
-                    </div>
-                    <div class="transaction-field">
-                        <label>Calificación</label>
-                        <div id="transactionRating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Modal de Chat -->
         <div id="chatModal" class="modal">
             <div class="modal-content chat-modal">
@@ -117,12 +58,6 @@
             </div>
         </div>
         <main>
-            <div class="search-bar">
-                <div class="usuario">
-                    <img src="img/usuario.jpg" alt="">
-                    <button class="btn publish-service-btn"> Anuncia un nuevo servicio </button>
-                </div>
-            </div>
             <div class="featured-section">
                 <div class="featured-item">Lo más destacado</div>
                 <div class="featured-item">Lo más destacado</div>

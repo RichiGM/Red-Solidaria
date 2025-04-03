@@ -1,7 +1,7 @@
 <!-- header.html -->
 <header class="header">
     <div class="header-left">
-        <a href="index.html" class="logo-link">
+        <a href="home.html" class="logo-link">
             <img src="img/logo2.jpg" alt="Red Solidaria" class="logo">
             <h1 class="brand-name">RED SOLIDARIA</h1>
         </a>
@@ -19,62 +19,61 @@
         <button class="icon-btn" id="userBtn">
             <i class="fas fa-user"></i>
         </button>
-        <span class="username">Usuario</span>
+        <span class="username" id="usernameDisplay">Usuario</span> <!-- Cambiado para tener un ID -->
     </div>
 </header>
 
+<!-- Dropdown de usuario -->
+<div class="user-dropdown" id="userDropdown">
+    <div class="user-info">
+        <img src="img/usuario.jpg" alt="Usuario">
+        <div class="user-details">
+            <h3 id="userNameDisplay">Usuario</h3> <!-- Cambiado para tener un ID -->
+            <p id="userEmailDisplay">Correo electrónico</p> <!-- Cambiado para tener un ID -->
+            <a href="cuenta.html" class="view-profile-btn">Ver perfil</a>
+        </div>
+    </div>
+    <ul class="user-menu">
+        <li><a href="misServicios.html" id="misServicios">Mis Servicios</a></li>
+    </ul>
+    <button class="logout-btn" onclick="showLogoutConfirm()">Cerrar Sesión</button>
+</div>
 
-        <!-- Dropdown de usuario -->
-        <div class="user-dropdown" id="userDropdown">
-            <div class="user-info">
-                <img src="img/usuario.jpg" alt="Usuario">
-                <div class="user-details">
-                    <h3>Usuario</h3>
-                    <p>Correo electrónico</p>
-                    <a href="cuenta.html" class="view-profile-btn">Ver perfil</a>
-                </div>
-            </div>
-            <ul class="user-menu">
-                <li><a href="#" id="bankLink">Banco Solidario</a></li>
-                <li><a href="#" id="transactionsLink">Transacciones</a></li>
-                <li><a href="#" id="reportsLink">Reportes y Denuncias</a></li>
-            </ul>
-            <button class="logout-btn" onclick="showLogoutConfirm()">Cerrar Sesión</button>
+<!-- Menú de Notificaciones -->
+<div id="notificationsDropdown" class="notifications-panel">
+    <h3 class="panel-title">Notificaciones</h3>
+    <div class="notification">
+        <button class="close-btn">×</button>
+        <p><strong>Te ha llegado una nueva solicitud</strong></p>
+        <p class="subtext">Usuario1 te ha hecho una solicitud</p>
+        <div class="notification-actions">
+            <button class="btn">Aceptar</button>
+            <button class="btn">Rechazar</button>
         </div>
-        <!-- Menú de Notificaciones -->
-        <div id="notificationsDropdown" class="notifications-panel">
-            <h3 class="panel-title">Notificaciones</h3>
-            <div class="notification">
-                <button class="close-btn">×</button>
-                <p><strong>Te ha llegado una nueva solicitud</strong></p>
-                <p class="subtext">Usuario1 te ha hecho una solicitud</p>
-                <div class="notification-actions">
-                    <button class="btn">Aceptar</button>
-                    <button class="btn">Rechazar</button>
-                </div>
-            </div>
-            <div class="notification">
-                <button class="close-btn">×</button>
-                <p><strong>Título de la notificación</strong></p>
-                <p class="subtext">Descripción breve.</p>
-                <button class="btn">Desactivar</button>
-            </div>
-        </div>
-        
-                <!-- Modal de confirmación de cerrar sesión -->
-        <div class="modal logout-confirm" id="logoutConfirm">
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeLogoutConfirm()">×</span>
-                <h2>¿Estás seguro?</h2>
-                <button class="btn" onclick="logout()">Aceptar</button>
-            </div>
-        </div>
-                        <!-- Mensaje de sesión cerrada (puede ser un modal temporal) -->
-        <div class="modal logout-message" id="logoutMessage">
-            <div class="modal-content">
-                <span class="close-btn" onclick="closeLogoutMessage()">×</span>
-                <h2>Sesión cerrada</h2>
-                <p>Tu sesión se ha cerrado correctamente. Vuelve pronto.</p>
-                <button class="btn" onclick="closeLogoutMessage()">Aceptar</button>
-            </div>
-        </div>
+    </div>
+    <div class="notification">
+        <button class="close-btn">×</button>
+        <p><strong>Título de la notificación</strong></p>
+        <p class="subtext">Descripción breve.</p>
+        <button class="btn">Desactivar</button>
+    </div>
+</div>
+
+<!-- Modal de confirmación de cerrar sesión -->
+<div class="modal logout-confirm" id="logoutConfirm">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeLogoutConfirm()">×</span>
+        <h2>¿Estás seguro?</h2>
+        <button class="btn" onclick="logout()">Aceptar</button>
+    </div>
+</div>
+
+<!-- Mensaje de sesión cerrada (puede ser un modal temporal) -->
+<div class="modal logout-message" id="logoutMessage">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeLogoutMessage()">×</span>
+        <h2>Sesión cerrada</h2>
+        <p>Tu sesión se ha cerrado correctamente. Vuelve pronto.</p>
+        <button class="btn" onclick="closeLogoutMessage()">Aceptar</button>
+    </div>
+</div>
