@@ -1,12 +1,9 @@
-let cambioContraseniaActivo = false;
 const emailLocal = localStorage.getItem('correo');
 const token = localStorage.getItem('lastToken');
 
 // Funciones de validación
 function validarContrasenia(contrasenia) {
-    if (!contrasenia.trim()) {
-        return false;
-    }
+    if (!contrasenia.trim()) return false;
     const tieneLongitud = contrasenia.length >= 12;
     const tieneMayuscula = /[A-Z]/.test(contrasenia);
     const tieneNumero = /[0-9]/.test(contrasenia);
@@ -15,8 +12,7 @@ function validarContrasenia(contrasenia) {
 }
 
 function validarNombreApellido(nombre) {
-    const tieneNumero = /[0-9]/.test(nombre);
-    return !tieneNumero; // Retorna verdadero si no hay números
+    return !/[0-9]/.test(nombre);
 }
 
 function validarEmail(email) {
@@ -28,22 +24,19 @@ function validarUbicacion(estado, ciudad) {
     return estado && ciudad;
 }
 
-function mostrarError(campo, mensaje) {
-    const errorElemento = campo.parentElement.querySelector('.error');
+function mostrarError(campoId, mensaje) {
+    const errorElemento = document.getElementById(campoId + 'Error');
     if (errorElemento) {
-        errorElemento.textContent = mensaje;
-    } else {
-        const nuevoError = document.createElement('div');
-        nuevoError.className = 'error';
-        nuevoError.textContent = `⚠️ ${mensaje}`;
-        campo.parentElement.appendChild(nuevoError);
+        errorElemento.textContent = mensaje ? `⚠️ ${mensaje}` : '';
     }
 }
 
 // Funciones de carga de datos
 async function cargarEstados() {
     try {
-        const response = await fetch('http://localhost:8080/RedSolidaria/api/ubicacion/estados');
+        const response = await fetch('http://localhost:8080/RedSolidaria/api/ubicacion/estados', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
         const estados = await response.json();
         const selectEstado = document.getElementById('state');
         estados.forEach(estado => {
@@ -57,14 +50,15 @@ async function cargarEstados() {
     }
 }
 
-async function cargarCiudades() {
-    const idEstado = document.getElementById('state').value;
+async function cargarCiudades(idEstado) {
     const selectCiudad = document.getElementById('city');
     selectCiudad.innerHTML = '<option value="">Seleccione una ciudad</option>';
 
     if (idEstado) {
         try {
-            const response = await fetch(`http://localhost:8080/RedSolidaria/api/ubicacion/ciudades/${idEstado}`);
+            const response = await fetch(`http://localhost:8080/RedSolidaria/api/ubicacion/ciudades/${idEstado}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const ciudades = await response.json();
             ciudades.forEach(ciudad => {
                 const option = document.createElement('option');
@@ -78,6 +72,57 @@ async function cargarCiudades() {
     }
 }
 
+async function cargarDatosUsuario() {
+    try {
+        console.log('Cargando datos para:', emailLocal);
+        const response = await fetch(`http://localhost:8080/RedSolidaria/api/usuario/obtener-datos?email=${emailLocal}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(errorData || 'Error al cargar datos del usuario');
+        }
+        const usuario = await response.json();
+        console.log('Datos del usuario:', usuario);
+
+        document.getElementById('nombre').value = usuario.nombre || '';
+        document.getElementById('apellidos').value = usuario.apellidos || '';
+        document.getElementById('email').value = usuario.correo || '';
+        
+        const idEstado = usuario.ciudad && usuario.ciudad.idEstado ? usuario.ciudad.idEstado : '';
+        const idCiudad = usuario.ciudad && usuario.ciudad.idCiudad ? usuario.ciudad.idCiudad : '';
+        
+        document.getElementById('state').value = idEstado;
+        if (idEstado) {
+            await cargarCiudades(idEstado);
+            document.getElementById('city').value = idCiudad;
+        }
+        
+        document.getElementById('descripcion').value = usuario.descripcion || '';
+        document.getElementById('preferenciasEmail').checked = usuario.preferenciasEmail === true;
+
+        // Depuración de los radios
+        const publicRadio = document.getElementById('public');
+        const privateRadio = document.getElementById('private');
+        console.log('Public radio existe:', publicRadio);
+        console.log('Private radio existe:', privateRadio);
+        
+        if (publicRadio && privateRadio) {
+            publicRadio.checked = usuario.configuracionPrivacidad === true;
+            privateRadio.checked = usuario.configuracionPrivacidad === false;
+            console.log('Privacidad seteada a:', usuario.configuracionPrivacidad);
+        } else {
+            console.error('No se encontraron los radios de privacidad');
+        }
+    } catch (error) {
+        console.error('Error al cargar datos del usuario:', error);
+    }
+}
+
 async function obtenerIdUsuarioPorEmail(email) {
     try {
         const response = await fetch(`http://localhost:8080/RedSolidaria/api/usuario/obtener-id?email=${email}`, {
@@ -87,12 +132,7 @@ async function obtenerIdUsuarioPorEmail(email) {
                 'Content-Type': 'application/json'
             }
         });
-
-        if (!response.ok) {
-            const errorData = await response.text();
-            throw new Error(errorData || 'Error al obtener el ID de usuario.');
-        }
-
+        if (!response.ok) throw new Error('Error al obtener el ID de usuario');
         const data = await response.json();
         return data.idUsuario;
     } catch (error) {
@@ -112,16 +152,13 @@ async function modificarUsuario(usuario) {
             },
             body: JSON.stringify(usuario)
         });
-
-        console.log('Response status:', response.status);
-        const result = await response.json();
-        console.log('Response JSON:', result);
-
         if (!response.ok) {
-            throw new Error(result.error || 'Error al modificar el usuario.');
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al modificar el usuario');
         }
-
+        const result = await response.json();
         console.log('Usuario modificado:', result.message);
+        return result;
     } catch (error) {
         console.error('Error al modificar el usuario:', error);
         throw error;
@@ -130,32 +167,45 @@ async function modificarUsuario(usuario) {
 
 // Event Listeners
 document.getElementById('changePasswordBtn').addEventListener('click', function() {
-    document.getElementById('newPasswordContainer').style.display = 'block';
-    this.style.display = 'none';
-    cambioContraseniaActivo = true;
+    document.getElementById('changePasswordModal').style.display = 'flex';
 });
 
-document.getElementById('cancelChangeBtn').addEventListener('click', function() {
-    document.getElementById('newPasswordContainer').style.display = 'none';
-    document.getElementById('changePasswordBtn').style.display = 'block';
-    cambioContraseniaActivo = false;
-    document.getElementById('newPassword').value = '';
-});
-
-document.getElementById('saveNewPasswordBtn').addEventListener('click', async function() {
+document.getElementById('changePasswordForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
     const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    mostrarError('newPassword', '');
+    mostrarError('confirmPassword', '');
 
     if (!validarContrasenia(newPassword)) {
-        mostrarError(document.getElementById('newPassword'), 'La contraseña debe tener al menos 12 caracteres, una mayúscula, un número y un carácter especial.');
+        mostrarError('newPassword', 'La contraseña debe tener al menos 12 caracteres, una mayúscula, un número y un carácter especial');
+        return;
+    }
+    if (newPassword !== confirmPassword) {
+        mostrarError('confirmPassword', 'Las contraseñas no coinciden');
         return;
     }
 
-    alert('Contraseña válida. Haz clic en "Guardar Cambios" para aplicar todos los cambios.');
+    try {
+        const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal);
+        const usuario = {
+            idUsuario: idUsuario,
+            contrasenia: newPassword
+        };
+        await modificarUsuario(usuario);
+        alert('Contraseña modificada exitosamente');
+        closeModalById('changePasswordModal');
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+    } catch (error) {
+        alert('Error al modificar la contraseña: ' + error.message);
+    }
 });
 
-document.addEventListener('DOMContentLoaded', cargarEstados);
-
-document.getElementById('state').addEventListener('change', cargarCiudades);
+document.getElementById('state').addEventListener('change', function() {
+    cargarCiudades(this.value);
+});
 
 document.getElementById('saveChangesBtn').addEventListener('click', async function() {
     const nombre = document.getElementById('nombre').value;
@@ -165,28 +215,27 @@ document.getElementById('saveChangesBtn').addEventListener('click', async functi
     const ciudad = document.getElementById('city').value;
     const descripcion = document.getElementById('descripcion').value;
     const preferenciasEmail = document.getElementById('preferenciasEmail').checked;
-    const privacy = document.querySelector('input[name="privacy"]:checked').id === 'public' ? 1 : 0;
-    const newPassword = cambioContraseniaActivo ? document.getElementById('newPassword').value : '';
+    const publicRadio = document.getElementById('public');
+    const privateRadio = document.getElementById('private');
+
+    const configuracionPrivacidad = publicRadio.checked ? true : false;
+    console.log('Configuración de privacidad al guardar:', configuracionPrivacidad);
 
     // Validaciones
     if (!validarNombreApellido(nombre)) {
-        mostrarError(document.getElementById('nombre'), 'El nombre no debe contener números.');
+        mostrarError('nombre', 'El nombre no debe contener números');
         return;
     }
     if (!validarNombreApellido(apellidos)) {
-        mostrarError(document.getElementById('apellidos'), 'Los apellidos no deben contener números.');
+        mostrarError('apellidos', 'Los apellidos no deben contener números');
         return;
     }
     if (!validarEmail(email)) {
-        mostrarError(document.getElementById('email'), 'El correo electrónico no es válido.');
+        mostrarError('email', 'El correo electrónico no es válido');
         return;
     }
     if (!validarUbicacion(estado, ciudad)) {
-        mostrarError(document.getElementById('state'), 'Por favor, selecciona un estado y una ciudad.');
-        return;
-    }
-    if (cambioContraseniaActivo && !validarContrasenia(newPassword)) {
-        mostrarError(document.getElementById('newPassword'), 'La contraseña debe tener al menos 12 caracteres, una mayúscula, un número y un carácter especial.');
+        mostrarError('state', 'Por favor, selecciona un estado y una ciudad');
         return;
     }
 
@@ -200,21 +249,32 @@ document.getElementById('saveChangesBtn').addEventListener('click', async functi
             ciudad: { idCiudad: parseInt(ciudad) },
             descripcion: descripcion,
             preferenciasEmail: preferenciasEmail,
-            configuracionPrivacidad: privacy,
-            contrasenia: newPassword
+            configuracionPrivacidad: configuracionPrivacidad
         };
 
+        console.log('Enviando al backend:', usuario);
         await modificarUsuario(usuario);
-        alert('Usuario modificado exitosamente.');
-
-        if (cambioContraseniaActivo) {
-            document.getElementById('newPasswordContainer').style.display = 'none';
-            document.getElementById('changePasswordBtn').style.display = 'block';
-            document.getElementById('newPassword').value = '';
-            cambioContraseniaActivo = false;
-        }
+        alert('Usuario modificado exitosamente');
+        location.reload();
     } catch (error) {
-        console.error('Error al guardar los cambios:', error);
         alert('No se pudo modificar el usuario: ' + error.message);
     }
+});
+
+document.addEventListener('DOMContentLoaded', async function() {
+    await cargarEstados();
+    await cargarDatosUsuario();
+});
+
+// Listeners para los radios de privacidad
+document.getElementById('public').addEventListener('change', function() {
+    console.log('Privacidad pública seleccionada:', this.checked); // true si está seleccionado
+});
+
+document.getElementById('private').addEventListener('change', function() {
+    console.log('Privacidad privada seleccionada:', this.checked); // true si está seleccionado
+});
+
+document.getElementById('preferenciasEmail').addEventListener('change', function() {
+    console.log('Preferencia seleccionada:', this.checked);
 });

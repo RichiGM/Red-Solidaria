@@ -604,10 +604,6 @@ p a:hover {
     align-items: center;
 }
 
-.privacy-toggle input[type="radio"] {
-    display: none;
-}
-
 .privacy-toggle span input[type="radio"]:checked + span {
     background-color: #78C091;
     color: white;

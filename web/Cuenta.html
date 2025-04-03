@@ -13,9 +13,11 @@
         <main class="account-main">
             <h1>MI CUENTA</h1>
             <div class="privacy-toggle">
-                <span>Público <input type="radio" name="privacy" id="public" checked></span>
-                <span>Privado <input type="radio" name="privacy" id="private"></span>
-            </div>               
+    <input type="radio" name="privacy" id="public" value="true" checked>
+    <span>Público</span>
+    <input type="radio" name="privacy" id="private" value="false">
+    <span>Privado</span>
+</div>         
             <div class="profile-photo">
                 <div class="photo-circle" id="photoCircle"></div>
                 <div class="photo-actions">
@@ -36,21 +38,6 @@
                         <input type="email" id="email" required>
 
                         <button type="button" id="changePasswordBtn">Modificar Contraseña</button>
-
-                        <!-- Contenedor para la nueva contraseña, inicialmente oculto -->
-                        <div id="newPasswordContainer" style="display: none;">
-                            <label for="newPassword">Nueva Contraseña</label>
-                            <input type="password" id="newPassword" required>
-                            <button type="button" id="cancelChangeBtn">Cancelar</button>
-                        </div>
-
-                        <!-- Campo para nueva contraseña, inicialmente oculto -->
-                        <div id="newPasswordContainer" style="display: none;">
-                            <label for="newPassword">Nueva Contraseña</label>
-                            <input type="password" id="newPassword" required>
-                            <button type="button" id="cancelChangeBtn">Cancelar</button>
-                            <button type="button" id="saveNewPasswordBtn">Guardar Cambios</button>
-                        </div>
                     </div>
 
                     <div class="form-column">
@@ -65,7 +52,7 @@
                         </select>
 
                         <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" ></textarea>
+                        <textarea id="descripcion"></textarea>
 
                         <label for="preferenciasEmail">
                             <input type="checkbox" id="preferenciasEmail" name="preferenciasEmail">
@@ -86,9 +73,11 @@
                 <form id="changePasswordForm">
                     <label for="newPassword">Nueva Contraseña *</label>
                     <input type="password" id="newPassword" required>
+                    <div class="error" id="newPasswordError"></div>
 
                     <label for="confirmPassword">Confirmar Nueva Contraseña *</label>
                     <input type="password" id="confirmPassword" required>
+                    <div class="error" id="confirmPasswordError"></div>
 
                     <button type="submit" class="btn">Modificar Contraseña</button>
                 </form>

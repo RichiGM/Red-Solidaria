@@ -64,3 +64,25 @@
 #newPasswordContainer {
     margin-top: 15px; /* Espaciado superior */
 }
+.privacy-toggle {
+    margin: 10px 0; /* Espaciado vertical */
+    display: flex; /* Usar flexbox para alinear los elementos */
+    align-items: center; /* Alinear verticalmente los elementos */
+}
+
+.privacy-toggle input[type="radio"] {
+    margin-right: 5px; /* Espaciado entre el radio button y el texto */
+}
+
+/* Estilo cuando el radio está seleccionado */
+input[type="radio"]:checked + span {
+    font-weight: bold; /* Negrita para el texto seleccionado */
+    color: #007bff; /* Azul para destacar */
+}
+
+/* Estilo base para los labels */
+.privacy-toggle span {
+    font-size: 16px; /* Tamaño de fuente */
+    color: #333; /* Color del texto */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+}
