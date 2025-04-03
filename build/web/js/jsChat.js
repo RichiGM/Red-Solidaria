@@ -120,4 +120,7 @@ function sendMessage() {
 }
 
 // Cargar chats al abrir el modal de chat
-document.getElementById("chatModal")?.addEventListener("click", loadChats);
+const chatModal = document.getElementById("chatModal");
+if (chatModal) {
+    chatModal.addEventListener("click", loadChats);
+}

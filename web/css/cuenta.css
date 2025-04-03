@@ -6,6 +6,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box; /* Asegura que el padding y el borde no afecten el ancho total */
     font-family: Arial, sans-serif;
 }
 
@@ -19,11 +20,11 @@ body {
 
 .container {
     background-color: white;
-    padding: 40px;
+    padding: 30px; /* Reduce el padding para hacer el contenedor más compacto */
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 400px; /* Mantiene un ancho máximo */
     text-align: center;
 }
 
@@ -32,28 +33,28 @@ body {
 }
 
 .logo img {
-    width: 100px; /* Adjust based on your logo size */
+    width: 100px; /* Ajusta según el tamaño de tu logo */
     height: auto;
 }
 
 .container h2 {
     color: #000000;
-    font-size: 24px;
-    margin-bottom: 10%;
+    font-size: 20px; /* Reduce el tamaño del título */
+    margin-bottom: 15px; /* Reduce el margen inferior */
     font-weight: bold;
 }
 
 .description {
     color: #666;
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduce el margen inferior */
     line-height: 1.5;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px; /* Reduce el espacio entre los elementos del formulario */
 }
 
 form .form-group {
@@ -64,30 +65,22 @@ label {
     display: block;
     color: #333;
     font-size: 14px;
-    margin-bottom: 5%;
+    margin-bottom: 5px; /* Reduce el margen inferior */
 }
 
 input[type="email"],
 input[type="text"],
-input[type="password"] {
-    padding: 8px;
-    margin-bottom: 0.5%;
+input[type="password"],
+select {
+    padding: 10px; /* Aumenta el padding para mejorar la usabilidad */
     border: 1px solid #B2E3B5;
     border-radius: 5px;
     font-size: 14px;
-    width: 96%;
-    margin-bottom: 5%;
+    width: 100%; /* Asegura que los campos ocupen todo el ancho */
 }
 
 select {
-    padding: 8px;
-    margin-bottom: 0.5%;
-    border: 1px solid #B2E3B5;
-    border-radius: 5px;
-    font-size: 14px;
-    width: 98%;
-    margin-bottom: 5%;
-    appearance: none; /* Remove default arrow in some browsers */
+    appearance: none; /* Elimina la flecha predeterminada en algunos navegadores */
     background: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
     background-size: 20px;
 }
@@ -98,16 +91,10 @@ select {
     color: #666;
     text-align: left;
     margin-top: 5px;
-    padding-left: 15px;
-}
-
-.password-requirements li,
-.requirements li {
-    margin-bottom: 5px;
 }
 
 .btn {
-    background: #78C091; /* Green button */
+    background: #78C091; /* Botón verde */
     color: white;
     padding: 10px;
     border: none;
@@ -117,13 +104,13 @@ select {
     transition: background-color 0.3s;
 }
 
-button:hover {
-    background-color: #B2E3B5; /* Darker green on hover */
+.btn:hover {
+    background-color: #B2E3B5; /* Verde más oscuro al pasar el mouse */
 }
 
 .back-link {
     display: block;
-    color: #006400; /* Dark green color */
+    color: #006400; /* Color verde oscuro */
     text-decoration: none;
     font-size: 14px;
     margin-top: 10px;
@@ -140,4 +127,10 @@ button:hover {
         margin: 20px;
         padding: 20px;
     }
+}
+
+.error {
+    color: red;
+    font-size: 10px; /* Tamaño de letra más pequeño */
+    margin-top: 5px;
 }
