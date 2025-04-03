@@ -1,5 +1,6 @@
 const emailLocal = localStorage.getItem('correo');
 const token = localStorage.getItem('lastToken');
+let cambioContraseniaActivo = false;
 
 // Funciones de validación
 function validarContrasenia(contrasenia) {
@@ -105,18 +106,11 @@ async function cargarDatosUsuario() {
         document.getElementById('descripcion').value = usuario.descripcion || '';
         document.getElementById('preferenciasEmail').checked = usuario.preferenciasEmail === true;
 
-        // Depuración de los radios
         const publicRadio = document.getElementById('public');
         const privateRadio = document.getElementById('private');
-        console.log('Public radio existe:', publicRadio);
-        console.log('Private radio existe:', privateRadio);
-        
         if (publicRadio && privateRadio) {
             publicRadio.checked = usuario.configuracionPrivacidad === true;
             privateRadio.checked = usuario.configuracionPrivacidad === false;
-            console.log('Privacidad seteada a:', usuario.configuracionPrivacidad);
-        } else {
-            console.error('No se encontraron los radios de privacidad');
         }
     } catch (error) {
         console.error('Error al cargar datos del usuario:', error);
@@ -167,40 +161,17 @@ async function modificarUsuario(usuario) {
 
 // Event Listeners
 document.getElementById('changePasswordBtn').addEventListener('click', function() {
-    document.getElementById('changePasswordModal').style.display = 'flex';
+    document.getElementById('newPasswordContainer').style.display = 'block';
+    this.style.display = 'none'; // Oculta el botón "Modificar Contraseña"
+    cambioContraseniaActivo = true;
 });
 
-document.getElementById('changePasswordForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
+document.getElementById('cancelChangeBtn').addEventListener('click', function() {
+    document.getElementById('newPasswordContainer').style.display = 'none';
+    document.getElementById('changePasswordBtn').style.display = 'block';
+    document.getElementById('newPassword').value = '';
     mostrarError('newPassword', '');
-    mostrarError('confirmPassword', '');
-
-    if (!validarContrasenia(newPassword)) {
-        mostrarError('newPassword', 'La contraseña debe tener al menos 12 caracteres, una mayúscula, un número y un carácter especial');
-        return;
-    }
-    if (newPassword !== confirmPassword) {
-        mostrarError('confirmPassword', 'Las contraseñas no coinciden');
-        return;
-    }
-
-    try {
-        const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal);
-        const usuario = {
-            idUsuario: idUsuario,
-            contrasenia: newPassword
-        };
-        await modificarUsuario(usuario);
-        alert('Contraseña modificada exitosamente');
-        closeModalById('changePasswordModal');
-        document.getElementById('newPassword').value = '';
-        document.getElementById('confirmPassword').value = '';
-    } catch (error) {
-        alert('Error al modificar la contraseña: ' + error.message);
-    }
+    cambioContraseniaActivo = false;
 });
 
 document.getElementById('state').addEventListener('change', function() {
@@ -216,10 +187,8 @@ document.getElementById('saveChangesBtn').addEventListener('click', async functi
     const descripcion = document.getElementById('descripcion').value;
     const preferenciasEmail = document.getElementById('preferenciasEmail').checked;
     const publicRadio = document.getElementById('public');
-    const privateRadio = document.getElementById('private');
-
     const configuracionPrivacidad = publicRadio.checked ? true : false;
-    console.log('Configuración de privacidad al guardar:', configuracionPrivacidad);
+    const newPassword = cambioContraseniaActivo ? document.getElementById('newPassword').value : '';
 
     // Validaciones
     if (!validarNombreApellido(nombre)) {
@@ -238,6 +207,10 @@ document.getElementById('saveChangesBtn').addEventListener('click', async functi
         mostrarError('state', 'Por favor, selecciona un estado y una ciudad');
         return;
     }
+    if (cambioContraseniaActivo && !validarContrasenia(newPassword)) {
+        mostrarError('newPassword', 'La contraseña debe tener al menos 12 caracteres, una mayúscula, un número y un carácter especial');
+        return;
+    }
 
     try {
         const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal);
@@ -252,9 +225,22 @@ document.getElementById('saveChangesBtn').addEventListener('click', async functi
             configuracionPrivacidad: configuracionPrivacidad
         };
 
+        // Solo agregar la contraseña si cambioContraseniaActivo es true y hay un valor
+        if (cambioContraseniaActivo && newPassword) {
+            usuario.contrasenia = newPassword;
+        }
+
         console.log('Enviando al backend:', usuario);
         await modificarUsuario(usuario);
         alert('Usuario modificado exitosamente');
+        
+        // Resetear el contenedor de contraseña si estaba activo
+        if (cambioContraseniaActivo) {
+            document.getElementById('newPasswordContainer').style.display = 'none';
+            document.getElementById('changePasswordBtn').style.display = 'block';
+            document.getElementById('newPassword').value = '';
+            cambioContraseniaActivo = false;
+        }
         location.reload();
     } catch (error) {
         alert('No se pudo modificar el usuario: ' + error.message);
@@ -268,11 +254,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Listeners para los radios de privacidad
 document.getElementById('public').addEventListener('change', function() {
-    console.log('Privacidad pública seleccionada:', this.checked); // true si está seleccionado
+    console.log('Privacidad pública seleccionada:', this.checked);
 });
 
 document.getElementById('private').addEventListener('change', function() {
-    console.log('Privacidad privada seleccionada:', this.checked); // true si está seleccionado
+    console.log('Privacidad privada seleccionada:', this.checked);
 });
 
 document.getElementById('preferenciasEmail').addEventListener('change', function() {

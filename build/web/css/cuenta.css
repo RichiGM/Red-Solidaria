@@ -1,88 +1,351 @@
-/* Estilos para la fila del formulario */
-.form-row {
-    display: flex; /* Usar flexbox para la distribución en columnas */
-    justify-content: space-between; /* Espacio entre columnas */
-    flex-wrap: wrap; /* Permitir que las columnas se envuelvan si es necesario */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Estilos para las columnas del formulario */
-.form-column {
-    flex: 1; /* Cada columna ocupa el mismo espacio */
-    min-width: 300px; /* Ancho mínimo para cada columna */
-    margin-right: 20px; /* Espaciado entre columnas */
+:root {
+  --primary-color: #78c091;
+  --secondary-color: #b2e3b5;
+  --primary-dark: #6ab082;
+  --text-dark: #333;
+  --text-medium: #555;
+  --text-light: #666;
+  --border-color: #ddd;
+  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --border-radius: 8px;
 }
 
-/* Eliminar margen derecho en la última columna */
-.form-column:last-child {
-    margin-right: 0;
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f8f8;
+  background-image: linear-gradient(135deg, #f8f8f8 0%, #e8f5ee 100%);
+  padding: 20px;
 }
 
-/* Asegurarse de que los inputs y textareas ocupen el 100% de su columna */
-.info-section input[type="text"],
-.info-section input[type="email"],
-.info-section input[type="password"],
-.info-section select,
-.info-section textarea {
-    width: 100%; /* Ancho completo */
-    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+.container {
+  width: 100%;
+  max-width: 450px;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
 }
 
-/* Estilos para el botón de cambiar contraseña */
-#changePasswordBtn {
-    background-color: #007bff; /* Color de fondo azul */
-    color: white; /* Color del texto */
-    border: none; /* Sin borde */
-    padding: 10px 15px; /* Espaciado interno */
-    border-radius: 4px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Efecto al pasar el mouse sobre el botón de cambiar contraseña */
-#changePasswordBtn:hover {
-    background-color: #0056b3; /* Color de fondo más oscuro al pasar el mouse */
+.logo {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-/* Estilos para el botón de cancelar */
-#cancelChangeBtn {
-    background-color: #dc3545; /* Color de fondo rojo */
-    color: white; /* Color del texto */
-    border: none; /* Sin borde */
-    padding: 10px 15px; /* Espaciado interno */
-    border-radius: 4px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
-    transition: background-color 0.3s; /* Transición suave para el color de fondo */
-    margin-left: 10px; /* Espaciado a la izquierda */
+.logo img {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  transition: var(--transition);
 }
 
-/* Efecto al pasar el mouse sobre el botón de cancelar */
-#cancelChangeBtn:hover {
-    background-color: #c82333; /* Color de fondo más oscuro al pasar el mouse */
+.logo img:hover {
+  transform: scale(1.05);
 }
 
-/* Estilos para el contenedor de nueva contraseña */
-#newPasswordContainer {
-    margin-top: 15px; /* Espaciado superior */
-}
-.privacy-toggle {
-    margin: 10px 0; /* Espaciado vertical */
-    display: flex; /* Usar flexbox para alinear los elementos */
-    align-items: center; /* Alinear verticalmente los elementos */
+h2 {
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
-.privacy-toggle input[type="radio"] {
-    margin-right: 5px; /* Espaciado entre el radio button y el texto */
+.description {
+  color: var(--text-medium);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
-/* Estilo cuando el radio está seleccionado */
-input[type="radio"]:checked + span {
-    font-weight: bold; /* Negrita para el texto seleccionado */
-    color: #007bff; /* Azul para destacar */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-/* Estilo base para los labels */
-.privacy-toggle span {
-    font-size: 16px; /* Tamaño de fuente */
-    color: #333; /* Color del texto */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-medium);
+  font-weight: 500;
+}
+
+input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(120, 192, 145, 0.2);
+}
+
+.password-requirements {
+  list-style-type: none;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.password-requirements li {
+  position: relative;
+  padding-left: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.password-requirements li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 1rem;
+}
+
+.btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(120, 192, 145, 0.3);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.decorative-shape {
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background-color: var(--secondary-color);
+  border-radius: 50%;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* Añadimos la forma decorativa automáticamente */
+.container::after {
+  content: "";
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background-color: var(--secondary-color);
+  border-radius: 50%;
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: 120px;
+  height: 120px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  opacity: 0.2;
+  z-index: -1;
+}
+
+/* Estilos para mensajes de error */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  display: none;
+}
+
+input.error {
+  border-color: #e74c3c;
+}
+
+input.error:focus {
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+}
+
+/* Estilos para mensajes de éxito */
+.success-message {
+  background-color: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success-message::before {
+  content: "✓";
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Estilos para indicador de fortaleza de contraseña */
+.password-strength {
+  height: 5px;
+  background-color: #eee;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.password-strength-meter {
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-weak {
+  width: 33%;
+  background-color: #e74c3c;
+}
+
+.strength-medium {
+  width: 66%;
+  background-color: #f39c12;
+}
+
+.strength-strong {
+  width: 100%;
+  background-color: #2ecc71;
+}
+
+/* Estilos responsivos */
+@media (max-width: 576px) {
+  .container {
+    padding: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.8rem;
+  }
+}
+
+/* Animación para el botón */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(120, 192, 145, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(120, 192, 145, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(120, 192, 145, 0);
+  }
+}
+
+.btn:focus {
+  animation: pulse 1.5s infinite;
+}
+
+/* Solución para el problema de SweetAlert */
+html.swal2-shown,
+body.swal2-shown {
+  overflow: visible !important;
+  height: auto !important;
+  padding-right: 0 !important;
+}
+
+body.swal2-height-auto {
+  height: 100vh !important;
+}
+
+.swal2-container {
+  padding-right: 0 !important;
+}
+
+.swal2-container.swal2-backdrop-show {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.swal2-popup {
+  border-radius: 15px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.swal2-title {
+  color: var(--text-dark) !important;
+  font-size: 1.5rem !important;
+}
+
+.swal2-content {
+  color: var(--text-medium) !important;
+}
+
+.swal2-confirm {
+  background-color: var(--primary-color) !important;
+  border-radius: var(--border-radius) !important;
+  transition: var(--transition) !important;
+}
+
+.swal2-confirm:hover {
+  background-color: var(--primary-dark) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(120, 192, 145, 0.3) !important;
+}
+
