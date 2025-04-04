@@ -80,4 +80,36 @@ public class RestServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
+    
+    @GET
+    @Path("/destacados")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getServiciosDestacados() {
+        try {
+            List<Map<String, Object>> servicios = servicioController.getServiciosDestacados();
+            return Response.ok(servicios).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al obtener los servicios destacados: " + e.getMessage());
+            String jsonError = gson.toJson(errorResponse);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
+        }
+    }
+    
+    @GET
+    @Path("/todos")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTodosServicios() {
+        try {
+            List<Map<String, Object>> servicios = servicioController.getTodosServicios();
+            return Response.ok(servicios).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al obtener todos los servicios: " + e.getMessage());
+            String jsonError = gson.toJson(errorResponse);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
+        }
+    }
 }

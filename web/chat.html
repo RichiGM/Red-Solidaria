@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Solidaria - Chat</title>
+    <link href="css/css.css" rel="stylesheet" type="text/css"/>
+    <link href="css/chat.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div id="header-container"></div>
+    
+    <main class="chat-main">
+        <h1>MIS CONVERSACIONES</h1>
+        
+        <div class="chat-container">
+            <!-- Panel izquierdo: Lista de chats -->
+            <div class="chat-list-panel">
+                <div class="chat-search">
+                    <input type="text" id="chatSearchInput" placeholder="Buscar conversación...">
+                    <button id="chatSearchButton"><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="chat-tabs">
+                    <button class="tab-btn active" data-tab="all">Todos</button>
+                    <button class="tab-btn" data-tab="unread">No leídos</button>
+                    <button class="tab-btn" data-tab="favorites">Favoritos</button>
+                </div>
+                
+                <div class="chat-list" id="chatList">
+                    <!-- Las conversaciones se cargarán dinámicamente aquí -->
+                </div>
+            </div>
+            
+            <!-- Panel derecho: Conversación activa -->
+            <div class="chat-conversation-panel" id="chatConversation">
+                <div class="empty-conversation-message" id="emptyConversation">
+                    <i class="fas fa-comments"></i>
+                    <p>Selecciona una conversación para comenzar</p>
+                </div>
+                
+                <div class="active-conversation" id="activeConversation" style="display: none;">
+                    <div class="conversation-header">
+                        <div class="user-info">
+                            <div class="photo-circle user-avatar-small">
+                                <img id="chatUserImage" src="img/usuario.jpg" alt="Foto de perfil">
+                            </div>
+                            <div class="user-details">
+                                <h3 id="chatUserName">Nombre del Usuario</h3>
+                                <span id="chatUserStatus">En línea</span>
+                            </div>
+                        </div>
+                        <div class="conversation-actions">
+                            <button class="action-btn" title="Ver perfil" id="viewProfileBtn">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <button class="action-btn" title="Más opciones" id="moreOptionsBtn">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="conversation-messages" id="chatMessages">
+                        <!-- Los mensajes se cargarán dinámicamente aquí -->
+                    </div>
+                    
+                    <div class="conversation-input">
+                        <textarea id="messageInput" placeholder="Escribe un mensaje..."></textarea>
+                        <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menú de opciones (aparece al hacer clic en "Más opciones") -->
+        <div class="options-menu" id="chatOptionsMenu" style="display: none;">
+            <ul>
+                <li><button id="blockUserBtn"><i class="fas fa-ban"></i> Bloquear usuario</button></li>
+                <li><button id="reportUserBtn"><i class="fas fa-flag"></i> Reportar usuario</button></li>
+                <li><button id="clearChatBtn"><i class="fas fa-trash"></i> Borrar conversación</button></li>
+            </ul>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+    <script src="js/loaderComponents.js" type="text/javascript"></script>
+    <script src="js/jsChat.js" type="text/javascript"></script>
+</body>
+</html>
+

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Solidaria - Mi Perfil</title>
+    <link href="css/css.css" rel="stylesheet" type="text/css"/>
+    <link href="css/perfil.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div id="header-container"></div>
+    
+    <main class="profile-main-container">
+        <!-- Banner y foto de perfil -->
+        <div class="profile-banner">
+            <button class="edit-banner-btn" title="Cambiar imagen de portada">
+                <i class="fas fa-camera"></i>
+            </button>
+            <div class="profile-avatar-container">
+                <div class="photo-circle">
+                    <img src="img/usuario.jpg" alt="Foto de perfil">
+                </div>
+                <button class="edit-avatar-btn" title="Cambiar foto de perfil">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Información básica del perfil -->
+        <div class="profile-header-info">
+            <div class="profile-name-container">
+                <h1 class="profile-name">Juan Pérez González</h1>
+                <button class="action-btn edit-profile-btn">
+                    <i class="fas fa-edit"></i> Editar perfil
+                </button>
+            </div>
+            <p class="profile-email">juan.perez@ejemplo.com</p>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-value">4.8</span>
+                    <span class="stat-label">Calificación</span>
+                    <div class="stars">★★★★★</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">12</span>
+                    <span class="stat-label">Servicios</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">28</span>
+                    <span class="stat-label">Intercambios</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección principal con columnas -->
+        <div class="profile-content">
+            <!-- Columna izquierda -->
+            <div class="profile-sidebar">
+                <div class="info-item profile-card">
+                    <div class="info-item-header card-header">
+                        <h3>Acerca de mí</h3>
+                        <button class="edit-btn" title="Editar información">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <p>Soy un profesional con experiencia en diseño gráfico y marketing digital. Me apasiona compartir mis conocimientos y aprender nuevas habilidades a través del intercambio de servicios.</p>
+                    </div>
+                </div>
+
+                <div class="info-item profile-card">
+                    <div class="info-item-header card-header">
+                        <h3>Habilidades</h3>
+                        <button class="edit-btn" title="Editar habilidades">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="skills-container">
+                            <span class="skill-tag">Diseño Gráfico</span>
+                            <span class="skill-tag">Marketing Digital</span>
+                            <span class="skill-tag">Redes Sociales</span>
+                            <span class="skill-tag">Fotografía</span>
+                            <span class="skill-tag">Edición de Video</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-item profile-card">
+                    <div class="info-item-header card-header">
+                        <h3>Contacto</h3>
+                        <button class="edit-btn" title="Editar contacto">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>juan.perez@ejemplo.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+52 123 456 7890</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Ciudad de México, México</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha (contenido principal) -->
+            <div class="profile-main">
+                <!-- Publicar nuevo servicio -->
+                <div class="new-service-card">
+                    <div class="new-service-header">
+                        <div class="photo-circle user-avatar-small">
+                            <img src="img/usuario.jpg" alt="Foto de perfil">
+                        </div>
+                        <button class="new-service-btn" id="openNewServiceModal">
+                            ¿Qué servicio quieres ofrecer hoy?
+                        </button>
+                    </div>
+                    <div class="new-service-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-briefcase"></i> Servicio
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-image"></i> Foto
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-chart-line"></i> Estadísticas
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filtros de servicios -->
+                <div class="services-filter">
+                    <button class="filter-btn active">Todos</button>
+                    <button class="filter-btn">Activos</button>
+                    <button class="filter-btn">Completados</button>
+                    <button class="filter-btn">Guardados</button>
+                </div>
+
+                <!-- Servicios publicados -->
+                <div class="services-container">
+                    <!-- Servicio 1 -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="photo-circle user-avatar-small">
+                                <img src="img/usuario.jpg" alt="Foto de perfil">
+                            </div>
+                            <div class="service-info">
+                                <h3 class="service-author">Juan Pérez González</h3>
+                                <span class="service-date">Publicado hace 2 días</span>
+                            </div>
+                            <div class="service-actions">
+                                <button class="action-icon" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-icon" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="service-body">
+                            <h3 class="service-title">Diseño de logotipos profesionales</h3>
+                            <p class="service-description">Ofrezco diseño de logotipos personalizados para tu negocio o proyecto. Incluye 3 propuestas iniciales y hasta 2 rondas de revisiones.</p>
+                            <div class="service-tags">
+                                <span class="service-tag">Diseño Gráfico</span>
+                                <span class="service-tag">Branding</span>
+                                <span class="service-tag">Virtual</span>
+                            </div>
+                        </div>
+                        <div class="service-footer">
+                            <div class="service-stats">
+                                <span class="stat"><i class="fas fa-eye"></i> 45 vistas</span>
+                                <span class="stat"><i class="fas fa-comment"></i> 3 solicitudes</span>
+                            </div>
+                            <button class="btn">Ver detalles</button>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 2 -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="photo-circle user-avatar-small">
+                                <img src="img/usuario.jpg" alt="Foto de perfil">
+                            </div>
+                            <div class="service-info">
+                                <h3 class="service-author">Juan Pérez González</h3>
+                                <span class="service-date">Publicado hace 1 semana</span>
+                            </div>
+                            <div class="service-actions">
+                                <button class="action-icon" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-icon" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="service-body">
+                            <h3 class="service-title">Estrategia de marketing para redes sociales</h3>
+                            <p class="service-description">Desarrollo de estrategia completa para tus redes sociales. Incluye análisis de competencia, calendario editorial y recomendaciones de contenido.</p>
+                            <div class="service-tags">
+                                <span class="service-tag">Marketing Digital</span>
+                                <span class="service-tag">Redes Sociales</span>
+                                <span class="service-tag">Virtual</span>
+                            </div>
+                        </div>
+                        <div class="service-footer">
+                            <div class="service-stats">
+                                <span class="stat"><i class="fas fa-eye"></i> 78 vistas</span>
+                                <span class="stat"><i class="fas fa-comment"></i> 5 solicitudes</span>
+                            </div>
+                            <button class="btn">Ver detalles</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Modal para nuevo servicio -->
+    <div id="newServiceModal" class="modal">
+        <div class="modal-content service-modal">
+            <span class="close" onclick="closeModal('newServiceModal')">&times;</span>
+            <div class="modal-header">
+                <h2>Publicar nuevo servicio</h2>
+            </div>
+            <form class="service-form">
+                <div class="form-row">
+                    <div class="form-column">
+                        <label for="service-title">Título del servicio</label>
+                        <input type="text" id="service-title" placeholder="Ej: Diseño de logotipos profesionales" required>
+                        
+                        <label for="service-description">Descripción</label>
+                        <textarea id="service-description" rows="4" placeholder="Describe detalladamente el servicio que ofreces..." required></textarea>
+                        
+                        <label for="service-category">Categoría</label>
+                        <select id="service-category" required>
+                            <option value="" disabled selected>Selecciona una categoría</option>
+                            <option value="diseno">Diseño</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="programacion">Programación</option>
+                            <option value="educacion">Educación</option>
+                            <option value="salud">Salud y Bienestar</option>
+                            <option value="hogar">Hogar</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-column">
+                        <label for="service-tags">Etiquetas (separadas por comas)</label>
+                        <input type="text" id="service-tags" placeholder="Ej: diseño, logotipos, branding">
+                        
+                        <label for="service-type">Tipo de servicio</label>
+                        <select id="service-type" required>
+                            <option value="" disabled selected>Selecciona un tipo</option>
+                            <option value="virtual">Virtual</option>
+                            <option value="presencial">Presencial</option>
+                            <option value="mixto">Mixto</option>
+                        </select>
+                        
+                        <label for="service-image">Imagen (opcional)</label>
+                        <div class="file-upload">
+                            <input type="file" id="service-image" accept="image/*">
+                            <label for="service-image" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i> Subir imagen
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <button type="button" class="btn" onclick="closeModal('newServiceModal')">Cancelar</button>
+                    <button type="submit" class="btn">Publicar servicio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/loaderComponents.js" type="text/javascript"></script>
+    <script src="js/jsPerfil.js" type="text/javascript"></script>
+</body>
+</html>
+
