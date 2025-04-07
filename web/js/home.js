@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelector(".chat-btn").addEventListener("click", () => {
         window.location.href = "chat.html"
       })
+      
     } catch (error) {
       console.error("Error en la inicialización:", error)
       Swal.fire({
@@ -34,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     }
   }
-
   // Cargar servicios destacados
   async function cargarServiciosDestacados() {
     try {
@@ -341,4 +341,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 })
-

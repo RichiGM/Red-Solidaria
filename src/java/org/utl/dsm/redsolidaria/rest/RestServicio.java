@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.Map;
 import org.utl.dsm.redsolidaria.model.Servicio;
 import org.utl.dsm.redsolidaria.controller.ControllerServicio;
+import org.utl.dsm.redsolidaria.model.Habilidad;
 
 @Path("/servicio")
 public class RestServicio {
 
     private final ControllerServicio servicioController = new ControllerServicio();
     private final Gson gson = new Gson();
-
+    
     @POST
     @Path("/agregar")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -81,6 +82,26 @@ public class RestServicio {
         }
     }
     
+    @PUT
+    @Path("/desactivar")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response desactivarServicio(@QueryParam("idServicio") int idServicio) {
+        try {
+            servicioController.eliminarServicio(idServicio); // Esto debe poner estatus = 2 en BD
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Servicio desactivado exitosamente");
+            String jsonResponse = gson.toJson(response);
+            return Response.ok(jsonResponse).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al desactivar el servicio: " + e.getMessage());
+            String jsonError = gson.toJson(errorResponse);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
+        }
+    }
+
+    
     @GET
     @Path("/destacados")
     @Produces(MediaType.APPLICATION_JSON)
@@ -110,6 +131,20 @@ public class RestServicio {
             errorResponse.put("error", "Error al obtener todos los servicios: " + e.getMessage());
             String jsonError = gson.toJson(errorResponse);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
+        }
+    }
+    
+    @GET
+    @Path("/todas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerTodasLasHabilidades() {
+        try {
+            List<Habilidad> habilidades = servicioController.obtenerTodas();
+            String json = gson.toJson(habilidades);
+            return Response.ok(json).build();
+        } catch (Exception e) {
+            String errorJson = gson.toJson("Error al obtener habilidades: " + e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorJson).build();
         }
     }
 }

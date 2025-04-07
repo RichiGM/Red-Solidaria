@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("searchInput").addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
       applyFilters()
-    }
+    }z
   })
 
   document.getElementById("modalityFilter").addEventListener("change", applyFilters)

@@ -147,7 +147,7 @@ body {
   border-radius: 15px;
   box-shadow: var(--shadow-md);
   position: relative;
-  overflow: hidden;
+  height: auto; /* Aseguramos que el contenedor se adapte al contenido */
 }
 
 .form-header {
@@ -309,6 +309,32 @@ body {
   z-index: 1;
 }
 
+/* Modificaciones para agregar scroll al formulario de registro */
+#registerForm {
+  max-height: 70vh; /* Altura máxima del formulario */
+  overflow-y: auto; /* Activa el scroll vertical */
+  padding-right: 1rem; /* Espacio para el scrollbar */
+}
+
+/* Estilizado del scrollbar */
+#registerForm::-webkit-scrollbar {
+  width: 8px;
+}
+
+#registerForm::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#registerForm::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+#registerForm::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
 /* Animation for form container height adjustment */
 .form-container {
   transition: height 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
@@ -370,4 +396,3 @@ body {
     gap: 0.5rem;
   }
 }
-

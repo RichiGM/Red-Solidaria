@@ -6,17 +6,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   let idUsuario = null
 
   // Elementos DOM
-  const profileName = document.querySelector(".profile-name")
-  const profileEmail = document.querySelector(".profile-email")
-  const profileAvatar = document.querySelector(".photo-circle img")
-  const editAvatarBtn = document.querySelector(".edit-avatar-btn")
-  const editBannerBtn = document.querySelector(".edit-banner-btn")
-  const profileBanner = document.querySelector(".profile-banner")
-  const aboutMeText = document.querySelector(".profile-card:nth-child(1) .card-body p")
-  const skillsContainer = document.querySelector(".profile-card:nth-child(2) .skills-container")
-  const contactItems = document.querySelectorAll(".profile-card:nth-child(3) .contact-item")
-  const servicesContainer = document.querySelector(".services-container")
-  const openNewServiceModalBtn = document.getElementById("openNewServiceModal")
+  const profileName = document.querySelector(".profile-name");
+  const profileEmail = document.querySelector(".profile-email");
+  const profileAvatar = document.querySelector(".photo-circle img");
+  const editAvatarBtn = document.querySelector(".edit-avatar-btn");
+  const editBannerBtn = document.querySelector(".edit-banner-btn");
+  const settingsBtn = document.querySelector(".settings-btn");
+  const profileBanner = document.querySelector(".profile-banner");
+  const aboutMeText = document.querySelector(".profile-card:nth-child(1) .card-body p");
+  const skillsContainer = document.querySelector(".profile-card:nth-child(2) .skills-container");
+  const contactItems = document.querySelectorAll(".profile-card:nth-child(3) .contact-item");
+  const servicesContainer = document.querySelector(".services-container");
+  const openNewServiceModalBtn = document.getElementById("openNewServiceModal");
 
   // Inicialización
   init()
@@ -269,29 +270,29 @@ document.addEventListener("DOMContentLoaded", async () => {
                 `
 
         servicesContainer.appendChild(servicioElement)
-      })
+      });
 
       // Agregar eventos a los botones
       document.querySelectorAll(".edit-service-btn").forEach((btn) => {
         btn.addEventListener("click", function () {
-          const servicioId = this.getAttribute("data-id")
-          editarServicio(servicioId)
-        })
-      })
+          const servicioId = this.getAttribute("data-id");
+          editarServicio(servicioId);
+        });
+      });
 
       document.querySelectorAll(".delete-service-btn").forEach((btn) => {
         btn.addEventListener("click", function () {
-          const servicioId = this.getAttribute("data-id")
-          eliminarServicio(servicioId)
-        })
-      })
+          const servicioId = this.getAttribute("data-id");
+          eliminarServicio(servicioId);
+        });
+      });
 
       document.querySelectorAll(".view-details-btn").forEach((btn) => {
         btn.addEventListener("click", function () {
-          const servicioId = this.getAttribute("data-id")
-          verDetallesServicio(servicioId)
-        })
-      })
+          const servicioId = this.getAttribute("data-id");
+          verDetallesServicio(servicioId);
+        });
+      });
     } catch (error) {
       console.error("Error al cargar los servicios:", error)
       Swal.fire({
@@ -316,9 +317,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     editBannerBtn.addEventListener("click", cambiarBanner)
 
     // Evento para editar perfil
-    document.querySelector(".edit-profile-btn").addEventListener("click", () => {
-      window.location.href = "cuenta.html"
-    })
+    document.querySelector(" .settings-btn .edit-profile-btn .edit-btn").addEventListener("click", () => {
+      window.location.href = "Cuenta.html";
+    });
 
     // Evento para editar "Acerca de mí"
     document.querySelector(".profile-card:nth-child(1) .edit-btn").addEventListener("click", editarAcercaDe)
@@ -1109,5 +1110,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById(modalId).classList.remove("active")
     document.body.classList.remove("modal-open")
   }
-})
-
+ 
+});

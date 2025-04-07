@@ -1,14 +1,14 @@
-const emailLocal = localStorage.getItem("correo")
-const token = localStorage.getItem("lastToken")
+const emailLocal = localStorage.getItem("correo");
+const token = localStorage.getItem("lastToken");
 
 // Mostrar el modal al hacer clic en "Agregar Servicio"
 document.getElementById("addServiceBtn").addEventListener("click", () => {
-  document.getElementById("addServiceModal").style.display = "flex"
-})
+  document.getElementById("addServiceModal").style.display = "flex";
+});
 
 // Manejar el envío del formulario de agregar servicio
 document.getElementById("addServiceForm").addEventListener("submit", async (event) => {
-  event.preventDefault()
+  event.preventDefault();
 
   const servicio = {
     titulo: document.getElementById("serviceTitle").value,
@@ -16,11 +16,11 @@ document.getElementById("addServiceForm").addEventListener("submit", async (even
     modalidad: document.getElementById("serviceModality").value === "presencial" ? 1 : 2, // Convertir a entero
     estatus: 1, // Asumimos que el estatus por defecto es "Activo"
     idUsuario: await obtenerIdUsuarioPorEmail(emailLocal), // Obtener el ID de usuario
-  }
+  };
 
   try {
-    const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal)
-    servicio.idUsuario = idUsuario
+    const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal);
+    servicio.idUsuario = idUsuario;
 
     const response = await fetch("http://localhost:8080/RedSolidaria/api/servicio/agregar", {
       method: "POST",
@@ -29,31 +29,31 @@ document.getElementById("addServiceForm").addEventListener("submit", async (even
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(servicio),
-    })
+    });
 
     if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.error || "Error al guardar el servicio")
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Error al guardar el servicio");
     }
 
-    const result = await response.json()
-    console.log("Servicio guardado:", result)
+    const result = await response.json();
+    console.log("Servicio guardado:", result);
 
-    closeModalById("addServiceModal")
-    await cargarServicios()
+    closeModalById("addServiceModal");
+    await cargarServicios();
   } catch (error) {
-    console.error("Error al guardar el servicio:", error)
+    console.error("Error al guardar el servicio:", error);
     Swal.fire({
       icon: "error",
       title: "Error",
       text: "No se pudo guardar el servicio: " + error.message,
-    })
+    });
   }
-})
+});
 
 // Manejar el envío del formulario de editar servicio
 document.getElementById("editServiceForm").addEventListener("submit", async (event) => {
-  event.preventDefault()
+  event.preventDefault();
 
   const servicio = {
     idServicio: Number.parseInt(document.getElementById("editServiceId").value),
@@ -62,7 +62,7 @@ document.getElementById("editServiceForm").addEventListener("submit", async (eve
     modalidad: document.getElementById("editServiceModality").value === "presencial" ? 1 : 2, // Convertir a entero
     estatus: document.getElementById("editServiceStatus").value === "activo" ? 1 : 0, // Convertir a entero
     idUsuario: await obtenerIdUsuarioPorEmail(emailLocal),
-  }
+  };
 
   try {
     const response = await fetch("http://localhost:8080/RedSolidaria/api/servicio/modificar", {
@@ -72,32 +72,32 @@ document.getElementById("editServiceForm").addEventListener("submit", async (eve
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(servicio),
-    })
+    });
 
     if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.error || "Error al editar el servicio")
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Error al editar el servicio");
     }
 
-    const result = await response.json()
-    console.log("Servicio editado:", result)
+    const result = await response.json();
+    console.log("Servicio editado:", result);
 
-    closeModalById("editServiceModal")
-    await cargarServicios()
+    closeModalById("editServiceModal");
+    await cargarServicios();
   } catch (error) {
-    console.error("Error al editar el servicio:", error)
+    console.error("Error al editar el servicio:", error);
     Swal.fire({
       icon: "error",
       title: "Error",
       text: "No se pudo editar el servicio: " + error.message,
-    })
+    });
   }
-})
+});
 
 // Función para cargar los servicios desde la API
 async function cargarServicios() {
   try {
-    const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal)
+    const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal);
     const response = await fetch(
       `http://localhost:8080/RedSolidaria/api/servicio/mis-servicios?idUsuario=${idUsuario}`,
       {
@@ -105,21 +105,21 @@ async function cargarServicios() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      },
-    )
+      }
+    );
 
     if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.error || "Error al cargar los servicios")
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Error al cargar los servicios");
     }
 
-    const servicios = await response.json()
-    const servicesList = document.getElementById("servicesList")
-    servicesList.innerHTML = "" // Limpiar la lista
+    const servicios = await response.json();
+    const servicesList = document.getElementById("servicesList");
+    servicesList.innerHTML = ""; // Limpiar la lista
 
     servicios.forEach((servicio) => {
-      const serviceCard = document.createElement("div")
-      serviceCard.className = "service-card"
+      const serviceCard = document.createElement("div");
+      serviceCard.className = "service-card";
       serviceCard.innerHTML = `
                 <h3>${servicio.titulo}</h3>
                 <p><label>Título:</label> ${servicio.titulo}</p>
@@ -127,36 +127,36 @@ async function cargarServicios() {
                 <p><label>Modalidad:</label> ${servicio.modalidad === 1 ? "Presencial" : "Virtual"}</p>
                 <p><label>Estatus:</label> ${servicio.estatus === 1 ? "Activo" : "Inactivo"}</p>
                 <button class="edit-icon" data-id="${servicio.idServicio}"><i class="fas fa-edit"></i></button>
-            `
-      servicesList.appendChild(serviceCard)
-    })
+            `;
+      servicesList.appendChild(serviceCard);
+    });
 
     // Añadir eventos a los botones de edición
     document.querySelectorAll(".edit-icon").forEach((button) => {
       button.addEventListener("click", function () {
-        const idServicio = this.getAttribute("data-id")
-        const servicio = servicios.find((s) => s.idServicio == idServicio)
-        abrirModalEditar(servicio)
-      })
-    })
+        const idServicio = this.getAttribute("data-id");
+        const servicio = servicios.find((s) => s.idServicio == idServicio);
+        abrirModalEditar(servicio);
+      });
+    });
   } catch (error) {
-    console.error("Error al cargar los servicios:", error)
+    console.error("Error al cargar los servicios:", error);
     Swal.fire({
       icon: "error",
       title: "Error",
       text: "No se pudieron cargar los servicios: " + error.message,
-    })
+    });
   }
 }
 
 // Función para abrir el modal de edición con los datos del servicio
 function abrirModalEditar(servicio) {
-  document.getElementById("editServiceId").value = servicio.idServicio
-  document.getElementById("editServiceTitle").value = servicio.titulo
-  document.getElementById("editServiceDescription").value = servicio.descripcion
-  document.getElementById("editServiceModality").value = servicio.modalidad === 1 ? "presencial" : "virtual"
-  document.getElementById("editServiceStatus").value = servicio.estatus === 1 ? "activo" : "inactivo"
-  document.getElementById("editServiceModal").style.display = "flex"
+  document.getElementById("editServiceId").value = servicio.idServicio;
+  document.getElementById("editServiceTitle").value = servicio.titulo;
+  document.getElementById("editServiceDescription").value = servicio.descripcion;
+  document.getElementById("editServiceModality").value = servicio.modalidad === 1 ? "presencial" : "virtual";
+  document.getElementById("editServiceStatus").value = servicio.estatus === 1 ? "activo" : "inactivo";
+  document.getElementById("editServiceModal").style.display = "flex";
 }
 
 // Función para obtener el ID del usuario por email
@@ -168,30 +168,29 @@ async function obtenerIdUsuarioPorEmail(email) {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-    })
+    });
 
     if (!response.ok) {
-      const errorData = await response.text()
-      throw new Error(errorData || "Error al obtener el ID de usuario.")
+      const errorData = await response.text();
+      throw new Error(errorData || "Error al obtener el ID de usuario.");
     }
 
-    const data = await response.json()
-    return data.idUsuario
+    const data = await response.json();
+    return data.idUsuario;
   } catch (error) {
-    console.error("Error al obtener el ID de usuario:", error)
-    throw error
+    console.error("Error al obtener el ID de usuario:", error);
+    throw error;
   }
 }
 
 // Función para cerrar modales por ID
 function closeModalById(modalId) {
-  const modal = document.getElementById(modalId)
+  const modal = document.getElementById(modalId);
   if (modal) {
-    modal.style.display = "none"
-    modal.classList.remove("modal-open")
+    modal.style.display = "none";
+    modal.classList.remove("modal-open");
   }
 }
 
 // Cargar los servicios al iniciar la página
-document.addEventListener("DOMContentLoaded", cargarServicios)
-
+document.addEventListener("DOMContentLoaded", cargarServicios);

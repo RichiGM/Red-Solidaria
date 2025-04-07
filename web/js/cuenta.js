@@ -593,4 +593,3 @@ document.addEventListener("DOMContentLoaded", async () => {
   await cargarEstados()
   await cargarDatosUsuario()
 })
-
