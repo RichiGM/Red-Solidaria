@@ -46,11 +46,15 @@ document.getElementById("addServiceForm").addEventListener("submit", async (even
     await cargarServicios();
   } catch (error) {
     console.error("Error al guardar el servicio:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "No se pudo guardar el servicio: " + error.message,
-    });
+    if (window.Swal) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo guardar el servicio: " + error.message,
+      });
+    } else {
+      console.error("Swal no está definido");
+    }
   }
 });
 
@@ -62,7 +66,9 @@ document.getElementById("editServiceForm").addEventListener("submit", async (eve
     idServicio: Number.parseInt(document.getElementById("editServiceId").value),
     titulo: document.getElementById("editServiceTitle").value,
     descripcion: document.getElementById("editServiceDescription").value,
-    modalidad: document.getElementById("editServiceModality").value === "presencial" ? 1 : 2, // Convertir a entero
+    modalidad: document.getElementById("editServiceModality").value === "presencial" ? 1 : 
+               document.getElementById("editServiceModality").value === "virtual" ? 2 : 
+               document.getElementById("editServiceModality").value === "mixto" ? 3 : 1, // Convertir a entero
     estatus: document.getElementById("editServiceStatus").value === "activo" ? 1 : 0, // Convertir a entero
     idUsuario: await obtenerIdUsuarioPorEmail(emailLocal),
   };
@@ -89,11 +95,15 @@ document.getElementById("editServiceForm").addEventListener("submit", async (eve
     await cargarServicios();
   } catch (error) {
     console.error("Error al editar el servicio:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "No se pudo editar el servicio: " + error.message,
-    });
+    if (window.Swal) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo editar el servicio: " + error.message,
+      });
+    } else {
+      console.error("Swal no está definido");
+    }
   }
 });
 
@@ -102,7 +112,7 @@ async function cargarServicios(query = "") {
   try {
     const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal);
     const response = await fetch(
-      `http://localhost:8080/RedSolidaria/api/servicio/mis-servicios ?idUsuario=${idUsuario}&query=${encodeURIComponent(query)}`,
+      `http://localhost:8080/RedSolidaria/api/servicio/mis-servicios?idUsuario=${idUsuario}&query=${encodeURIComponent(query)}`,
       {
         method: "GET",
         headers: {
@@ -112,8 +122,8 @@ async function cargarServicios(query = "") {
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Error al cargar los servicios");
+      const errorData = await response.text();
+      throw new Error(errorData || "Error al cargar los servicios");
     }
 
     const servicios = await response.json();
@@ -127,7 +137,7 @@ async function cargarServicios(query = "") {
                 <h3>${servicio.titulo}</h3>
                 <p><label>Título:</label> ${servicio.titulo}</p>
                 <p><label>Descripción:</label> ${servicio.descripcion}</p>
-                <p><label>Modalidad:</label> ${servicio.modalidad === 1 ? "Presencial" : "Virtual"}</p>
+                <p><label>Modalidad:</label> ${servicio.modalidad === 1 ? "Presencial" : servicio.modalidad === 2 ? "Virtual" : "Mixto"}</p>
                 <p><label>Estatus:</label> ${servicio.estatus === 1 ? "Activo" : "Inactivo"}</p>
                 <button class="edit-icon" data-id="${servicio.idServicio}"><i class="fas fa-edit"></i></button>
             `;
@@ -144,11 +154,15 @@ async function cargarServicios(query = "") {
     });
   } catch (error) {
     console.error("Error al cargar los servicios:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "No se pudieron cargar los servicios: " + error.message,
-    });
+    if (window.Swal) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudieron cargar los servicios: " + error.message,
+      });
+    } else {
+      console.error("Swal no está definido");
+    }
   }
 }
 
@@ -159,21 +173,25 @@ async function buscarServicios() {
 }
 
 // Evento para buscar servicios al hacer clic en el botón de búsqueda
-document.getElementById("searchButton").addEventListener("click", buscarServicios);
+if (document.getElementById("searchButton")) {
+  document.getElementById("searchButton").addEventListener("click", buscarServicios);
+}
 
 // Evento para buscar servicios al presionar "Enter" en el campo de búsqueda
-document.getElementById("searchInput").addEventListener("keyup", (event) => {
-  if (event.key === "Enter") {
-    buscarServicios();
-  }
-});
+if (document.getElementById("searchInput")) {
+  document.getElementById("searchInput").addEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+      buscarServicios();
+    }
+  });
+}
 
 // Función para abrir el modal de edición con los datos del servicio
 function abrirModalEditar(servicio) {
   document.getElementById("editServiceId").value = servicio.idServicio;
   document.getElementById("editServiceTitle").value = servicio.titulo;
   document.getElementById("editServiceDescription").value = servicio.descripcion;
-  document.getElementById("editServiceModality").value = servicio.modalidad === 1 ? "presencial" : "virtual";
+  document.getElementById("editServiceModality").value = servicio.modalidad === 1 ? "presencial" : servicio.modalidad === 2 ? "virtual" : "mixto";
   document.getElementById("editServiceStatus").value = servicio.estatus === 1 ? "activo" : "inactivo";
   document.getElementById("editServiceModal").style.display = "flex";
 }
