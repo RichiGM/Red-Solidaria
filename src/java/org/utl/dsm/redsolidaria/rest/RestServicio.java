@@ -10,6 +10,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import com.google.gson.Gson;
+import jakarta.ws.rs.HeaderParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class RestServicio {
 
     private final ControllerServicio servicioController = new ControllerServicio();
     private final Gson gson = new Gson();
-    
+
     @POST
     @Path("/agregar")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -81,7 +82,7 @@ public class RestServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
-    
+
     @PUT
     @Path("/desactivar")
     @Produces(MediaType.APPLICATION_JSON)
@@ -101,14 +102,21 @@ public class RestServicio {
         }
     }
 
-    
     @GET
     @Path("/destacados")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiciosDestacados() {
+    public Response getServiciosDestacados(@HeaderParam("Authorization") String authHeader) {
+        Gson gson = new Gson();
         try {
-            List<Map<String, Object>> servicios = servicioController.getServiciosDestacados();
-            return Response.ok(servicios).build();
+            // Extraer el token del header
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                throw new Exception("Token no proporcionado o inválido");
+            }
+            String token = authHeader.replace("Bearer ", "");
+
+            List<Map<String, Object>> servicios = servicioController.getServiciosDestacados(token);
+            String jsonResponse = gson.toJson(servicios);
+            return Response.ok(jsonResponse).build();
         } catch (Exception e) {
             e.printStackTrace();
             Map<String, String> errorResponse = new HashMap<>();
@@ -117,14 +125,17 @@ public class RestServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
-    
+
     @GET
     @Path("/todos")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTodosServicios() {
+    public Response getTodosServicios(
+            @QueryParam("modalidad") Integer modalidad,
+            @QueryParam("ordenarPor") String ordenarPor) {
         try {
-            List<Map<String, Object>> servicios = servicioController.getTodosServicios();
-            return Response.ok(servicios).build();
+            List<Map<String, Object>> servicios = servicioController.getTodosServicios(modalidad, ordenarPor);
+            String jsonResponse = gson.toJson(servicios);
+            return Response.ok(jsonResponse).build();
         } catch (Exception e) {
             e.printStackTrace();
             Map<String, String> errorResponse = new HashMap<>();
@@ -133,7 +144,7 @@ public class RestServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
-    
+
     @GET
     @Path("/todas")
     @Produces(MediaType.APPLICATION_JSON)
@@ -147,4 +158,24 @@ public class RestServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorJson).build();
         }
     }
+    
+    @GET
+@Path("/buscar")
+@Produces(MediaType.APPLICATION_JSON)
+public Response buscarServicios(
+        @QueryParam("query") String query,
+        @QueryParam("modalidad") Integer modalidad,
+        @QueryParam("ordenarPor") String ordenarPor) {
+    try {
+        List<Map<String, Object>> servicios = servicioController.buscarServicios(query, modalidad, ordenarPor);
+        String jsonResponse = gson.toJson(servicios);
+        return Response.ok(jsonResponse).build();
+    } catch (Exception e) {
+        e.printStackTrace();
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Error al buscar servicios: " + e.getMessage());
+        String jsonError = gson.toJson(errorResponse);
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
+    }
+}
 }

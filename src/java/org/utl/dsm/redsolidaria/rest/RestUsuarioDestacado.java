@@ -1,8 +1,10 @@
 package org.utl.dsm.redsolidaria.rest;
 
+import com.google.gson.Gson;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.utl.dsm.redsolidaria.controller.ControllerUsuarioDestacado;
@@ -15,13 +17,24 @@ public class RestUsuarioDestacado {
     @GET
     @Path("/destacados")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsuariosDestacados() {
+    public Response getUsuariosDestacados(@HeaderParam("Authorization") String authHeader) {
+        Gson gson = new Gson();
         try {
-            List<Map<String, Object>> usuarios = usuarioController.getUsuariosDestacados();
-            return Response.ok(usuarios).build();
+            // Extraer el token del header
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                throw new Exception("Token no proporcionado o inválido");
+            }
+            String token = authHeader.replace("Bearer ", "");
+
+            List<Map<String, Object>> usuarios = usuarioController.getUsuariosDestacados(token);
+            String jsonResponse = gson.toJson(usuarios);
+            return Response.ok(jsonResponse).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error al obtener usuarios destacados: " + e.getMessage()).build();
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al obtener usuarios destacados: " + e.getMessage());
+            String jsonError = gson.toJson(errorResponse);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(jsonError).build();
         }
     }
 

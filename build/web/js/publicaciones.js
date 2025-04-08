@@ -1,102 +1,106 @@
 // Variables globales
-const BASE_URL = "http://localhost:8080/RedSolidaria/api"
-let currentPage = 1
-const itemsPerPage = 6
-let totalPages = 1
-let allServices = []
-let filteredServices = []
+const BASE_URL = "http://localhost:8080/RedSolidaria/api";
+let currentPage = 1;
+const itemsPerPage = 6;
+let totalPages = 1;
+let allServices = [];
+let filteredServices = [];
 
 // Cargar servicios al iniciar la página
 document.addEventListener("DOMContentLoaded", () => {
-  loadAllServices()
+  loadAllServices();
 
   // Eventos para filtros y búsqueda
-  document.getElementById("searchButton").addEventListener("click", applyFilters)
+  document.getElementById("searchButton").addEventListener("click", applyFilters);
   document.getElementById("searchInput").addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
-      applyFilters()
-    }z
-  })
+      applyFilters();
+    }
+  });
 
-  document.getElementById("modalityFilter").addEventListener("change", applyFilters)
-  document.getElementById("sortFilter").addEventListener("change", applyFilters)
+  document.getElementById("modalityFilter").addEventListener("change", applyFilters);
+  document.getElementById("sortFilter").addEventListener("change", applyFilters);
 
   // Eventos para botones en el modal de detalle
-  document.getElementById("requestServiceBtn").addEventListener("click", requestService)
-  document.getElementById("contactProviderBtn").addEventListener("click", contactProvider)
-})
+  document.getElementById("requestServiceBtn").addEventListener("click", requestService);
+  document.getElementById("contactProviderBtn").addEventListener("click", contactProvider);
+});
 
 // Función para cargar todos los servicios
 async function loadAllServices() {
   try {
-    const response = await fetch(`${BASE_URL}/servicio/todos`, {
+    const modalityFilter = document.getElementById("modalityFilter").value;
+    const sortFilter = document.getElementById("sortFilter").value;
+
+    const response = await fetch(`${BASE_URL}/servicio/todos?modalidad=${modalityFilter}&ordenarPor=${sortFilter}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("lastToken")}`,
       },
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Error al cargar los servicios")
+      throw new Error("Error al cargar los servicios");
     }
 
-    allServices = await response.json()
-    filteredServices = [...allServices]
-    totalPages = Math.ceil(filteredServices.length / itemsPerPage)
+    allServices = await response.json();
+    filteredServices = [...allServices];
+    totalPages = Math.ceil(filteredServices.length / itemsPerPage);
 
-    displayServices(currentPage)
-    setupPagination()
+    displayServices(currentPage);
+    setupPagination();
   } catch (error) {
-    console.error("Error:", error)
+    console.error("Error:", error);
     Swal.fire({
       icon: "error",
       title: "Error",
       text: "No se pudieron cargar los servicios. Por favor, intenta de nuevo más tarde.",
-    })
+    });
   }
 }
 
 // Función para aplicar filtros
 function applyFilters() {
-  const searchTerm = document.getElementById("searchInput").value.toLowerCase()
-  const modalityFilter = document.getElementById("modalityFilter").value
-  const sortFilter = document.getElementById("sortFilter").value
+  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+  const modalityFilter = document.getElementById("modalityFilter").value;
+  const sortFilter = document.getElementById("sortFilter").value;
 
   // Filtrar por término de búsqueda y modalidad
   filteredServices = allServices.filter((service) => {
     const matchesSearch =
       searchTerm === "" ||
       service.titulo.toLowerCase().includes(searchTerm) ||
-      service.descripcion.toLowerCase().includes(searchTerm)
+      service.descripcion.toLowerCase().includes(searchTerm);
 
-    const matchesModality = modalityFilter === "" || service.modalidad.toString() === modalityFilter
+    const matchesModality = modalityFilter === "" || service.modalidad.toString() === modalityFilter;
 
-    return matchesSearch && matchesModality
-  })
+    return matchesSearch && matchesModality;
+  });
 
   // Ordenar resultados
   switch (sortFilter) {
     case "recent":
       // Asumiendo que hay un campo fecha en el servicio
-      filteredServices.sort((a, b) => new Date(b.fechaCreacion || Date.now()) - new Date(a.fechaCreacion || Date.now()))
-      break
+      filteredServices.sort((a, b) => new Date(b.fechaCreacion || Date.now()) - new Date(a.fechaCreacion || Date.now()));
+      break;
     case "rating":
       // Asumiendo que hay un campo calificación en el servicio o usuario
-      filteredServices.sort((a, b) => (b.calificacion || 0) - (a.calificacion || 0))
-      break
+      filteredServices.sort((a, b) => (b.calificacionUsuario || 0) - (a.calificacionUsuario || 0));
+      break;
     case "name":
-      filteredServices.sort((a, b) => a.titulo.localeCompare(b.titulo))
-      break
+      filteredServices.sort((a, b) => a.titulo.localeCompare(b.titulo));
+      break;
   }
 
   // Actualizar paginación y mostrar resultados
-  currentPage = 1
-  totalPages = Math.ceil(filteredServices.length / itemsPerPage)
-  displayServices(currentPage)
-  setupPagination()
+  currentPage = 1;
+  totalPages = Math.ceil(filteredServices.length / itemsPerPage);
+  displayServices(currentPage);
+  setupPagination();
 }
 
+// Resto del código permanece igual...
 // Función para mostrar servicios en la página actual
 function displayServices(page) {
   const startIndex = (page - 1) * itemsPerPage

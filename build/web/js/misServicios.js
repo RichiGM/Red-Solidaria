@@ -1,3 +1,4 @@
+// Variables globales
 const emailLocal = localStorage.getItem("correo");
 const token = localStorage.getItem("lastToken");
 
@@ -13,7 +14,9 @@ document.getElementById("addServiceForm").addEventListener("submit", async (even
   const servicio = {
     titulo: document.getElementById("serviceTitle").value,
     descripcion: document.getElementById("serviceDescription").value,
-    modalidad: document.getElementById("serviceModality").value === "presencial" ? 1 : 2, // Convertir a entero
+    modalidad: document.getElementById("serviceModality").value === "presencial" ? 1 : 
+          document.getElementById("serviceModality").value === "virtual" ? 2 : 
+          document.getElementById("serviceModality").value === "mixto" ? 3 : 1, // Valor por defecto: 1 // Convertir a entero
     estatus: 1, // Asumimos que el estatus por defecto es "Activo"
     idUsuario: await obtenerIdUsuarioPorEmail(emailLocal), // Obtener el ID de usuario
   };
@@ -95,11 +98,11 @@ document.getElementById("editServiceForm").addEventListener("submit", async (eve
 });
 
 // Función para cargar los servicios desde la API
-async function cargarServicios() {
+async function cargarServicios(query = "") {
   try {
     const idUsuario = await obtenerIdUsuarioPorEmail(emailLocal);
     const response = await fetch(
-      `http://localhost:8080/RedSolidaria/api/servicio/mis-servicios?idUsuario=${idUsuario}`,
+      `http://localhost:8080/RedSolidaria/api/servicio/mis-servicios ?idUsuario=${idUsuario}&query=${encodeURIComponent(query)}`,
       {
         method: "GET",
         headers: {
@@ -148,6 +151,22 @@ async function cargarServicios() {
     });
   }
 }
+
+// Función para buscar servicios
+async function buscarServicios() {
+  const searchTerm = document.getElementById("searchInput").value;
+  await cargarServicios(searchTerm);
+}
+
+// Evento para buscar servicios al hacer clic en el botón de búsqueda
+document.getElementById("searchButton").addEventListener("click", buscarServicios);
+
+// Evento para buscar servicios al presionar "Enter" en el campo de búsqueda
+document.getElementById("searchInput").addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
+    buscarServicios();
+  }
+});
 
 // Función para abrir el modal de edición con los datos del servicio
 function abrirModalEditar(servicio) {
