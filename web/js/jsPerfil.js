@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", async () => {
   // Variables globales
-  const BASE_URL = "http://localhost:8080/RedSolidaria/api"
-  const emailLocal = localStorage.getItem("correo")
-  const token = localStorage.getItem("lastToken")
-  let idUsuario = null
+  const BASE_URL = "http://localhost:8080/RedSolidaria/api";
+  const emailLocal = localStorage.getItem("correo");
+  const token = localStorage.getItem("lastToken");
+  let idUsuario = null;
 
   // Elementos DOM
   const profileName = document.querySelector(".profile-name");
@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const openNewServiceModalBtn = document.getElementById("openNewServiceModal");
 
   // Inicialización
-  init()
+  init();
 
   // Función de inicialización
   async function init() {
     try {
       // Obtener ID del usuario actual
-      idUsuario = await obtenerIdUsuario()
+      idUsuario = await obtenerIdUsuario();
 
       if (!idUsuario) {
         Swal.fire({
@@ -36,32 +36,32 @@ document.addEventListener("DOMContentLoaded", async () => {
           confirmButtonText: "Ir al inicio de sesión",
           allowOutsideClick: false,
         }).then(() => {
-          window.location.href = "index.html"
-        })
-        return
+          window.location.href = "index.html";
+        });
+        return;
       }
 
       // Cargar datos del perfil
-      await cargarDatosPerfil()
+      await cargarDatosPerfil();
 
       // Cargar servicios del usuario
-      await cargarServicios()
+      await cargarServicios();
 
       // Configurar eventos
-      configurarEventos()
+      configurarEventos();
     } catch (error) {
-      console.error("Error en la inicialización:", error)
+      console.error("Error en la inicialización:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "Ocurrió un error al cargar el perfil. Por favor, intenta de nuevo más tarde.",
-      })
+      });
     }
   }
 
   // Obtener ID del usuario actual
   async function obtenerIdUsuario() {
-    if (!emailLocal) return null
+    if (!emailLocal) return null;
 
     try {
       const response = await fetch(`${BASE_URL}/usuario/obtener-id?email=${emailLocal}`, {
@@ -70,17 +70,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Error al obtener el ID de usuario")
+        throw new Error("Error al obtener el ID de usuario");
       }
 
-      const data = await response.json()
-      return data.idUsuario
+      const data = await response.json();
+      return data.idUsuario;
     } catch (error) {
-      console.error("Error:", error)
-      return null
+      console.error("Error:", error);
+      return null;
     }
   }
 
@@ -93,76 +93,76 @@ document.addEventListener("DOMContentLoaded", async () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Error al cargar datos del perfil")
+        throw new Error("Error al cargar datos del perfil");
       }
 
-      const usuario = await response.json()
+      const usuario = await response.json();
 
       // Actualizar nombre y correo
-      profileName.textContent = `${usuario.nombre} ${usuario.apellidos}`
-      profileEmail.textContent = usuario.correo
+      profileName.textContent = `${usuario.nombre} ${usuario.apellidos}`;
+      profileEmail.textContent = usuario.correo;
 
       // Actualizar foto de perfil
       if (usuario.foto) {
-        profileAvatar.src = usuario.foto
+        profileAvatar.src = usuario.foto;
         document.querySelectorAll(".user-avatar-small img").forEach((img) => {
-          img.src = usuario.foto
-        })
+          img.src = usuario.foto;
+        });
       }
 
       // Actualizar banner si existe
       if (usuario.banner) {
-        profileBanner.style.backgroundImage = `url(${usuario.banner})`
+        profileBanner.style.backgroundImage = `url(${usuario.banner})`;
       }
 
       // Actualizar descripción
       if (usuario.descripcion) {
-        aboutMeText.textContent = usuario.descripcion
+        aboutMeText.textContent = usuario.descripcion;
       }
 
       // Actualizar habilidades
       if (usuario.habilidades && usuario.habilidades.length > 0) {
-        skillsContainer.innerHTML = ""
+        skillsContainer.innerHTML = "";
         usuario.habilidades.forEach((habilidad) => {
-          const skillTag = document.createElement("span")
-          skillTag.className = "skill-tag"
-          skillTag.textContent = habilidad.nombre
-          skillsContainer.appendChild(skillTag)
-        })
+          const skillTag = document.createElement("span");
+          skillTag.className = "skill-tag";
+          skillTag.textContent = habilidad.nombre;
+          skillsContainer.appendChild(skillTag);
+        });
       }
 
       // Actualizar información de contacto
       contactItems.forEach((item) => {
-        const icon = item.querySelector("i")
-        const span = item.querySelector("span")
+        const icon = item.querySelector("i");
+        const span = item.querySelector("span");
 
         if (icon.classList.contains("fa-envelope")) {
-          span.textContent = usuario.correo
+          span.textContent = usuario.correo;
         } else if (icon.classList.contains("fa-phone")) {
-          span.textContent = usuario.telefono || "+52 123 456 7890"
+          span.textContent = usuario.telefono || "+52 123 456 7890";
         } else if (icon.classList.contains("fa-map-marker-alt")) {
-          span.textContent = usuario.ciudad ? `${usuario.ciudad.nombre}, ${usuario.ciudad.estado}` : "No especificada"
+          span.textContent = usuario.ciudad ? `${usuario.ciudad.nombre}, ${usuario.ciudad.estado}` : "No especificada";
         }
-      })
+      });
 
       // Actualizar estadísticas
       document.querySelector(".stat-value:nth-child(1)").textContent = usuario.reputacion
         ? usuario.reputacion.toFixed(1)
-        : "0.0"
+        : "0.0";
 
       // Generar estrellas según la reputación
-      const starsContainer = document.querySelector(".stars")
-      starsContainer.innerHTML = generarEstrellas(usuario.reputacion || 0)
+      const starsContainer = document.querySelector(".stars");
+      starsContainer.innerHTML = generarEstrellas(usuario.reputacion || 0);
     } catch (error) {
-      console.error("Error al cargar datos del perfil:", error)
+      console.error("Error al cargar datos del perfil:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "No se pudieron cargar los datos del perfil. Por favor, intenta de nuevo más tarde.",
-      })
+      });
     }
   }
 
@@ -175,19 +175,19 @@ document.addEventListener("DOMContentLoaded", async () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Error al cargar los servicios")
+        throw new Error("Error al cargar los servicios");
       }
 
-      const servicios = await response.json()
+      const servicios = await response.json();
 
       // Actualizar contador de servicios
-      document.querySelector(".stat-value:nth-child(2)").textContent = servicios.length
+      document.querySelector(".stat-value:nth-child(2)").textContent = servicios.length;
 
       // Limpiar contenedor de servicios
-      servicesContainer.innerHTML = ""
+      servicesContainer.innerHTML = "";
 
       if (servicios.length === 0) {
         servicesContainer.innerHTML = `
@@ -196,42 +196,42 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <h3>No tienes servicios publicados</h3>
                         <p>Publica tu primer servicio para comenzar a intercambiar.</p>
                     </div>
-                `
-        return
+                `;
+        return;
       }
 
       // Renderizar servicios
       servicios.forEach((servicio) => {
-        const servicioElement = document.createElement("div")
-        servicioElement.className = "service-card"
+        const servicioElement = document.createElement("div");
+        servicioElement.className = "service-card";
 
         // Determinar la modalidad en texto
-        let modalidadTexto = "Desconocida"
+        let modalidadTexto = "Desconocida";
         switch (servicio.modalidad) {
           case 1:
-            modalidadTexto = "Presencial"
-            break
+            modalidadTexto = "Presencial";
+            break;
           case 2:
-            modalidadTexto = "Virtual"
-            break
+            modalidadTexto = "Virtual";
+            break;
           case 3:
-            modalidadTexto = "Mixta"
-            break
+            modalidadTexto = "Mixta";
+            break;
         }
 
         // Formatear fecha
-        const fechaPublicacion = servicio.fechaPublicacion ? new Date(servicio.fechaPublicacion) : new Date()
-        const ahora = new Date()
-        const diferencia = ahora - fechaPublicacion
-        const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24))
+        const fechaPublicacion = servicio.fechaPublicacion ? new Date(servicio.fechaPublicacion) : new Date();
+        const ahora = new Date();
+        const diferencia = ahora - fechaPublicacion;
+        const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
 
-        let fechaTexto = ""
+        let fechaTexto = "";
         if (dias === 0) {
-          fechaTexto = "Publicado hoy"
+          fechaTexto = "Publicado hoy";
         } else if (dias === 1) {
-          fechaTexto = "Publicado ayer"
+          fechaTexto = "Publicado ayer";
         } else {
-          fechaTexto = `Publicado hace ${dias} días`
+          fechaTexto = `Publicado hace ${dias} días`;
         }
 
         servicioElement.innerHTML = `
@@ -267,9 +267,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </div>
                         <button class="btn view-details-btn" data-id="${servicio.idServicio}">Ver detalles</button>
                     </div>
-                `
+                `;
 
-        servicesContainer.appendChild(servicioElement)
+        servicesContainer.appendChild(servicioElement);
       });
 
       // Agregar eventos a los botones
@@ -294,12 +294,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       });
     } catch (error) {
-      console.error("Error al cargar los servicios:", error)
+      console.error("Error al cargar los servicios:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "No se pudieron cargar los servicios. Por favor, intenta de nuevo más tarde.",
-      })
+      });
     }
   }
 
@@ -307,14 +307,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   function configurarEventos() {
     // Evento para abrir modal de nuevo servicio
     openNewServiceModalBtn.addEventListener("click", () => {
-      openModal("newServiceModal")
-    })
+      openModal("newServiceModal");
+    });
 
     // Evento para cambiar foto de perfil
-    editAvatarBtn.addEventListener("click", cambiarFotoPerfil)
+    editAvatarBtn.addEventListener("click", cambiarFotoPerfil);
 
     // Evento para cambiar banner
-    editBannerBtn.addEventListener("click", cambiarBanner)
+    editBannerBtn.addEventListener("click", cambiarBanner);
 
     // Evento para editar perfil
     document.querySelector(" .settings-btn .edit-profile-btn .edit-btn").addEventListener("click", () => {
@@ -322,43 +322,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // Evento para editar "Acerca de mí"
-    document.querySelector(".profile-card:nth-child(1) .edit-btn").addEventListener("click", editarAcercaDe)
+    document.querySelector(".profile-card:nth-child(1) .edit-btn").addEventListener("click", editarAcercaDe);
 
     // Evento para editar habilidades
-    document.querySelector(".profile-card:nth-child(2) .edit-btn").addEventListener("click", editarHabilidades)
+    document.querySelector(".profile-card:nth-child(2) .edit-btn").addEventListener("click", editarHabilidades);
 
     // Evento para editar contacto
-    document.querySelector(".profile-card:nth-child(3) .edit-btn").addEventListener("click", editarContacto)
+    document.querySelector(".profile-card:nth-child(3) .edit-btn").addEventListener("click", editarContacto);
 
     // Evento para publicar nuevo servicio
-    document.querySelector("#newServiceModal form").addEventListener("submit", publicarServicio)
+    document.querySelector("#newServiceModal form").addEventListener("submit", publicarServicio);
 
     // Eventos para filtros de servicios
     document.querySelectorAll(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", function () {
-        document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"))
-        this.classList.add("active")
-        filtrarServicios(this.textContent.toLowerCase())
-      })
-    })
+        document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+        this.classList.add("active");
+        filtrarServicios(this.textContent.toLowerCase());
+      });
+    });
   }
 
   // Cambiar foto de perfil
   function cambiarFotoPerfil() {
     // Crear un input de archivo oculto
-    const fileInput = document.createElement("input")
-    fileInput.type = "file"
-    fileInput.accept = "image/*"
-    fileInput.style.display = "none"
-    document.body.appendChild(fileInput)
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.style.display = "none";
+    document.body.appendChild(fileInput);
 
     // Simular clic en el input
-    fileInput.click()
+    fileInput.click();
 
     // Manejar la selección de archivo
     fileInput.addEventListener("change", async function () {
       if (this.files && this.files[0]) {
-        const file = this.files[0]
+        const file = this.files[0];
 
         // Validar tamaño (máximo 5MB)
         if (file.size > 5 * 1024 * 1024) {
@@ -366,8 +366,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             icon: "error",
             title: "Error",
             text: "La imagen es demasiado grande. El tamaño máximo permitido es 5MB.",
-          })
-          return
+          });
+          return;
         }
 
         // Validar tipo (solo imágenes)
@@ -376,8 +376,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             icon: "error",
             title: "Error",
             text: "El archivo seleccionado no es una imagen válida.",
-          })
-          return
+          });
+          return;
         }
 
         try {
@@ -387,14 +387,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             text: "Por favor, espera mientras se sube la imagen.",
             allowOutsideClick: false,
             didOpen: () => {
-              Swal.showLoading()
+              Swal.showLoading();
             },
-          })
+          });
 
           // Subir la imagen
-          const formData = new FormData()
-          formData.append("foto", file)
-          formData.append("email", emailLocal)
+          const formData = new FormData();
+          formData.append("foto", file);
+          formData.append("email", emailLocal);
 
           const response = await fetch(`${BASE_URL}/usuario/subir-foto`, {
             method: "POST",
@@ -402,56 +402,56 @@ document.addEventListener("DOMContentLoaded", async () => {
               Authorization: `Bearer ${token}`,
             },
             body: formData,
-          })
+          });
 
           if (!response.ok) {
-            throw new Error("Error al subir la foto de perfil")
+            throw new Error("Error al subir la foto de perfil");
           }
 
-          const data = await response.json()
+          const data = await response.json();
 
           // Actualizar la interfaz
-          profileAvatar.src = data.fotoUrl
+          profileAvatar.src = data.fotoUrl;
           document.querySelectorAll(".user-avatar-small img").forEach((img) => {
-            img.src = data.fotoUrl
-          })
+            img.src = data.fotoUrl;
+          });
 
           Swal.fire({
             icon: "success",
             title: "Éxito",
             text: "La foto de perfil se ha actualizado correctamente.",
-          })
+          });
         } catch (error) {
-          console.error("Error al cambiar la foto de perfil:", error)
+          console.error("Error al cambiar la foto de perfil:", error);
           Swal.fire({
             icon: "error",
             title: "Error",
             text: "No se pudo cambiar la foto de perfil. Por favor, intenta de nuevo más tarde.",
-          })
+          });
         }
       }
 
       // Eliminar el input de archivo
-      document.body.removeChild(fileInput)
-    })
+      document.body.removeChild(fileInput);
+    });
   }
 
   // Cambiar banner
   function cambiarBanner() {
     // Crear un input de archivo oculto
-    const fileInput = document.createElement("input")
-    fileInput.type = "file"
-    fileInput.accept = "image/*"
-    fileInput.style.display = "none"
-    document.body.appendChild(fileInput)
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.style.display = "none";
+    document.body.appendChild(fileInput);
 
     // Simular clic en el input
-    fileInput.click()
+    fileInput.click();
 
     // Manejar la selección de archivo
     fileInput.addEventListener("change", async function () {
       if (this.files && this.files[0]) {
-        const file = this.files[0]
+        const file = this.files[0];
 
         // Validar tamaño (máximo 5MB)
         if (file.size > 5 * 1024 * 1024) {
@@ -459,8 +459,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             icon: "error",
             title: "Error",
             text: "La imagen es demasiado grande. El tamaño máximo permitido es 5MB.",
-          })
-          return
+          });
+          return;
         }
 
         // Validar tipo (solo imágenes)
@@ -469,8 +469,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             icon: "error",
             title: "Error",
             text: "El archivo seleccionado no es una imagen válida.",
-          })
-          return
+          });
+          return;
         }
 
         try {
@@ -480,14 +480,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             text: "Por favor, espera mientras se sube la imagen.",
             allowOutsideClick: false,
             didOpen: () => {
-              Swal.showLoading()
+              Swal.showLoading();
             },
-          })
+          });
 
           // Subir la imagen
-          const formData = new FormData()
-          formData.append("banner", file)
-          formData.append("email", emailLocal)
+          const formData = new FormData();
+          formData.append("banner", file);
+          formData.append("email", emailLocal);
 
           const response = await fetch(`${BASE_URL}/usuario/subir-banner`, {
             method: "POST",
@@ -495,35 +495,35 @@ document.addEventListener("DOMContentLoaded", async () => {
               Authorization: `Bearer ${token}`,
             },
             body: formData,
-          })
+          });
 
           if (!response.ok) {
-            throw new Error("Error al subir el banner")
+            throw new Error("Error al subir el banner");
           }
 
-          const data = await response.json()
+          const data = await response.json();
 
           // Actualizar la interfaz
-          profileBanner.style.backgroundImage = `url(${data.bannerUrl})`
+          profileBanner.style.backgroundImage = `url(${data.bannerUrl})`;
 
           Swal.fire({
             icon: "success",
             title: "Éxito",
             text: "El banner se ha actualizado correctamente.",
-          })
+          });
         } catch (error) {
-          console.error("Error al cambiar el banner:", error)
+          console.error("Error al cambiar el banner:", error);
           Swal.fire({
             icon: "error",
             title: "Error",
             text: "No se pudo cambiar el banner. Por favor, intenta de nuevo más tarde.",
-          })
+          });
         }
       }
 
       // Eliminar el input de archivo
-      document.body.removeChild(fileInput)
-    })
+      document.body.removeChild(fileInput);
+    });
   }
 
   // Editar "Acerca de mí"
@@ -542,7 +542,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       preConfirm: async (descripcion) => {
         try {
           // Obtener ID del usuario
-          const idUsuario = await obtenerIdUsuario()
+          const idUsuario = await obtenerIdUsuario();
 
           // Actualizar descripción
           const response = await fetch(`${BASE_URL}/usuario/actualizar-descripcion`, {
@@ -555,20 +555,20 @@ document.addEventListener("DOMContentLoaded", async () => {
               idUsuario: idUsuario,
               descripcion: descripcion,
             }),
-          })
+          });
 
           if (!response.ok) {
-            throw new Error("Error al actualizar la descripción")
+            throw new Error("Error al actualizar la descripción");
           }
 
           // Actualizar la interfaz
-          aboutMeText.textContent = descripcion
+          aboutMeText.textContent = descripcion;
 
-          return true
+          return true;
         } catch (error) {
-          console.error("Error al actualizar la descripción:", error)
-          Swal.showValidationMessage(`Error: ${error.message}`)
-          return false
+          console.error("Error al actualizar la descripción:", error);
+          Swal.showValidationMessage(`Error: ${error.message}`);
+          return false;
         }
       },
     }).then((result) => {
@@ -577,9 +577,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           icon: "success",
           title: "Éxito",
           text: "La descripción se ha actualizado correctamente.",
-        })
+        });
       }
-    })
+    });
   }
 
   // Editar habilidades
@@ -592,32 +592,32 @@ document.addEventListener("DOMContentLoaded", async () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Error al obtener las habilidades")
+        throw new Error("Error al obtener las habilidades");
       }
 
-      const habilidades = await response.json()
+      const habilidades = await response.json();
 
       // Obtener habilidades actuales del usuario
       const habilidadesActuales = Array.from(skillsContainer.querySelectorAll(".skill-tag")).map(
         (tag) => tag.textContent,
-      )
+      );
 
       // Crear opciones para el select múltiple
-      const inputOptions = {}
+      const inputOptions = {};
       habilidades.forEach((habilidad) => {
-        inputOptions[habilidad.idHabilidad] = habilidad.nombre
-      })
+        inputOptions[habilidad.idHabilidad] = habilidad.nombre;
+      });
 
       // Determinar valores preseleccionados
-      const preselectedValues = []
+      const preselectedValues = [];
       habilidades.forEach((habilidad) => {
         if (habilidadesActuales.includes(habilidad.nombre)) {
-          preselectedValues.push(habilidad.idHabilidad.toString())
+          preselectedValues.push(habilidad.idHabilidad.toString());
         }
-      })
+      });
 
       // Mostrar modal de selección
       const { value: selectedHabilidades } = await Swal.fire({
@@ -634,17 +634,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         confirmButtonText: "Guardar",
         cancelButtonText: "Cancelar",
         didOpen: () => {
-          const select = Swal.getInput()
+          const select = Swal.getInput();
           for (let i = 0; i < select.options.length; i++) {
             if (preselectedValues.includes(select.options[i].value)) {
-              select.options[i].selected = true
+              select.options[i].selected = true;
             }
           }
         },
         preConfirm: async (value) => {
           try {
             // Convertir a array si es un solo valor
-            const habilidadesSeleccionadas = Array.isArray(value) ? value : [value]
+            const habilidadesSeleccionadas = Array.isArray(value) ? value : [value];
 
             // Actualizar habilidades del usuario
             const response = await fetch(`${BASE_URL}/usuario/actualizar-habilidades`, {
@@ -657,70 +657,70 @@ document.addEventListener("DOMContentLoaded", async () => {
                 idUsuario: idUsuario,
                 habilidades: habilidadesSeleccionadas.map((id) => ({ idHabilidad: Number.parseInt(id) })),
               }),
-            })
+            });
 
             if (!response.ok) {
-              throw new Error("Error al actualizar las habilidades")
+              throw new Error("Error al actualizar las habilidades");
             }
 
-            return habilidadesSeleccionadas
+            return habilidadesSeleccionadas;
           } catch (error) {
-            console.error("Error al actualizar las habilidades:", error)
-            Swal.showValidationMessage(`Error: ${error.message}`)
-            return false
+            console.error("Error al actualizar las habilidades:", error);
+            Swal.showValidationMessage(`Error: ${error.message}`);
+            return false;
           }
         },
-      })
+      });
 
       if (selectedHabilidades) {
         // Actualizar la interfaz
-        skillsContainer.innerHTML = ""
+        skillsContainer.innerHTML = "";
 
         // Convertir a array si es un solo valor
         const habilidadesSeleccionadas = Array.isArray(selectedHabilidades)
           ? selectedHabilidades
-          : [selectedHabilidades]
+          : [selectedHabilidades];
 
         habilidadesSeleccionadas.forEach((idHabilidad) => {
-          const habilidad = habilidades.find((h) => h.idHabilidad.toString() === idHabilidad)
+          const habilidad = habilidades.find((h) => h.idHabilidad.toString() === idHabilidad);
           if (habilidad) {
-            const skillTag = document.createElement("span")
-            skillTag.className = "skill-tag"
-            skillTag.textContent = habilidad.nombre
-            skillsContainer.appendChild(skillTag)
+            const skillTag = document.createElement("span");
+            skillTag.className = "skill-tag";
+            skillTag.textContent = habilidad.nombre;
+            skillsContainer.appendChild(skillTag);
           }
-        })
+        });
 
         Swal.fire({
           icon: "success",
           title: "Éxito",
           text: "Las habilidades se han actualizado correctamente.",
-        })
+        });
       }
     } catch (error) {
-      console.error("Error al editar las habilidades:", error)
+      console.error("Error al editar las habilidades:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "No se pudieron editar las habilidades. Por favor, intenta de nuevo más tarde.",
-      })
+      });
     }
   }
 
   // Editar contacto
   function editarContacto() {
     // Obtener valores actuales
-    const contactItems = document.querySelectorAll(".profile-card:nth-child(3) .contact-item")
-    let telefono = ""
+    const contactItems = document.querySelectorAll(".profile-card:nth-child(3) .contact-item");
+    let telefono = "";
 
     contactItems.forEach((item) => {
-      const icon = item.querySelector("i")
-      const span = item.querySelector("span")
+      const icon = item.querySelector("i");
+      const span = item.querySelector("span");
 
       if (icon.classList.contains("fa-phone")) {
-        telefono = span.textContent
+        telefono = span.textContent;
       }
-    })
+    });
 
     Swal.fire({
       title: "Editar Contacto",
@@ -735,7 +735,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       cancelButtonText: "Cancelar",
       preConfirm: async () => {
         try {
-          const telefonoNuevo = document.getElementById("telefono").value
+          const telefonoNuevo = document.getElementById("telefono").value;
 
           // Actualizar teléfono del usuario
           const response = await fetch(`${BASE_URL}/usuario/actualizar-telefono`, {
@@ -748,27 +748,27 @@ document.addEventListener("DOMContentLoaded", async () => {
               idUsuario: idUsuario,
               telefono: telefonoNuevo,
             }),
-          })
+          });
 
           if (!response.ok) {
-            throw new Error("Error al actualizar el teléfono")
+            throw new Error("Error al actualizar el teléfono");
           }
 
           // Actualizar la interfaz
           contactItems.forEach((item) => {
-            const icon = item.querySelector("i")
-            const span = item.querySelector("span")
+            const icon = item.querySelector("i");
+            const span = item.querySelector("span");
 
             if (icon.classList.contains("fa-phone")) {
-              span.textContent = telefonoNuevo
+              span.textContent = telefonoNuevo;
             }
-          })
+          });
 
-          return true
+          return true;
         } catch (error) {
-          console.error("Error al actualizar el teléfono:", error)
-          Swal.showValidationMessage(`Error: ${error.message}`)
-          return false
+          console.error("Error al actualizar el teléfono:", error);
+          Swal.showValidationMessage(`Error: ${error.message}`);
+          return false;
         }
       },
     }).then((result) => {
@@ -777,21 +777,21 @@ document.addEventListener("DOMContentLoaded", async () => {
           icon: "success",
           title: "Éxito",
           text: "La información de contacto se ha actualizado correctamente.",
-        })
+        });
       }
-    })
+    });
   }
 
   // Publicar nuevo servicio
   async function publicarServicio(event) {
-    event.preventDefault()
+    event.preventDefault();
 
     // Obtener valores del formulario
-    const titulo = document.getElementById("service-title").value
-    const descripcion = document.getElementById("service-description").value
-    const categoria = document.getElementById("service-category").value
-    const tags = document.getElementById("service-tags").value
-    const tipo = document.getElementById("service-type").value
+    const titulo = document.getElementById("service-title").value;
+    const descripcion = document.getElementById("service-description").value;
+    const categoria = document.getElementById("service-category").value;
+    const tags = document.getElementById("service-tags").value;
+    const tipo = document.getElementById("service-type").value;
 
     // Validar campos obligatorios
     if (!titulo || !descripcion || !categoria || !tipo) {
@@ -799,8 +799,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         icon: "error",
         title: "Error",
         text: "Por favor, completa todos los campos obligatorios.",
-      })
-      return
+      });
+      return;
     }
 
     try {
@@ -810,19 +810,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         text: "Por favor, espera mientras se publica el servicio.",
         allowOutsideClick: false,
         didOpen: () => {
-          Swal.showLoading()
+          Swal.showLoading();
         },
-      })
+      });
 
       // Determinar modalidad según el tipo
-      let modalidad = 1 // Presencial por defecto
+      let modalidad = 1; // Presencial por defecto
       switch (tipo) {
         case "virtual":
-          modalidad = 2
-          break
+          modalidad = 2;
+          break;
         case "mixto":
-          modalidad = 3
-          break
+          modalidad = 3;
+          break;
       }
 
       // Crear objeto de servicio
@@ -837,7 +837,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           .split(",")
           .map((tag) => tag.trim())
           .filter((tag) => tag),
-      }
+      };
 
       // Publicar servicio
       const response = await fetch(`${BASE_URL}/servicio/publicar`, {
@@ -847,37 +847,37 @@ document.addEventListener("DOMContentLoaded", async () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(servicio),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Error al publicar el servicio")
+        throw new Error("Error al publicar el servicio");
       }
 
       // Cerrar modal
-      closeModal("newServiceModal")
+      closeModal("newServiceModal");
 
       // Limpiar formulario
-      document.getElementById("service-title").value = ""
-      document.getElementById("service-description").value = ""
-      document.getElementById("service-category").value = ""
-      document.getElementById("service-tags").value = ""
-      document.getElementById("service-type").value = ""
+      document.getElementById("service-title").value = "";
+      document.getElementById("service-description").value = "";
+      document.getElementById("service-category").value = "";
+      document.getElementById("service-tags").value = "";
+      document.getElementById("service-type").value = "";
 
       // Recargar servicios
-      await cargarServicios()
+      await cargarServicios();
 
       Swal.fire({
         icon: "success",
         title: "Éxito",
         text: "El servicio se ha publicado correctamente.",
-      })
+      });
     } catch (error) {
-      console.error("Error al publicar el servicio:", error)
+      console.error("Error al publicar el servicio:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "No se pudo publicar el servicio. Por favor, intenta de nuevo más tarde.",
-      })
+      });
     }
   }
 
@@ -891,26 +891,26 @@ document.addEventListener("DOMContentLoaded", async () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Error al obtener los detalles del servicio")
+        throw new Error("Error al obtener los detalles del servicio");
       }
 
-      const servicio = await response.json()
+      const servicio = await response.json();
 
       // Determinar tipo según la modalidad
-      let tipo = ""
+      let tipo = "";
       switch (servicio.modalidad) {
         case 1:
-          tipo = "presencial"
-          break
+          tipo = "presencial";
+          break;
         case 2:
-          tipo = "virtual"
-          break
+          tipo = "virtual";
+          break;
         case 3:
-          tipo = "mixto"
-          break
+          tipo = "mixto";
+          break;
       }
 
       // Mostrar formulario de edición
@@ -945,30 +945,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         confirmButtonText: "Guardar",
         cancelButtonText: "Cancelar",
         preConfirm: () => {
-          const titulo = document.getElementById("edit-titulo").value
-          const descripcion = document.getElementById("edit-descripcion").value
-          const tipo = document.getElementById("edit-tipo").value
-          const estatus = document.getElementById("edit-estatus").value
+          const titulo = document.getElementById("edit-titulo").value;
+          const descripcion = document.getElementById("edit-descripcion").value;
+          const tipo = document.getElementById("edit-tipo").value;
+          const estatus = document.getElementById("edit-estatus").value;
 
           if (!titulo || !descripcion) {
-            Swal.showValidationMessage("Por favor, completa todos los campos obligatorios")
-            return false
+            Swal.showValidationMessage("Por favor, completa todos los campos obligatorios");
+            return false;
           }
 
-          return { titulo, descripcion, tipo, estatus }
+          return { titulo, descripcion, tipo, estatus };
         },
-      })
+      });
 
       if (formValues) {
         // Determinar modalidad según el tipo
-        let modalidad = 1 // Presencial por defecto
+        let modalidad = 1; // Presencial por defecto
         switch (formValues.tipo) {
           case "virtual":
-            modalidad = 2
-            break
+            modalidad = 2;
+            break;
           case "mixto":
-            modalidad = 3
-            break
+            modalidad = 3;
+            break;
         }
 
         // Actualizar servicio
@@ -985,28 +985,28 @@ document.addEventListener("DOMContentLoaded", async () => {
             modalidad: modalidad,
             estatus: Number.parseInt(formValues.estatus),
           }),
-        })
+        });
 
         if (!updateResponse.ok) {
-          throw new Error("Error al actualizar el servicio")
+          throw new Error("Error al actualizar el servicio");
         }
 
         // Recargar servicios
-        await cargarServicios()
+        await cargarServicios();
 
         Swal.fire({
           icon: "success",
           title: "Éxito",
           text: "El servicio se ha actualizado correctamente.",
-        })
+        });
       }
     } catch (error) {
-      console.error("Error al editar el servicio:", error)
+      console.error("Error al editar el servicio:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "No se pudo editar el servicio. Por favor, intenta de nuevo más tarde.",
-      })
+      });
     }
   }
 
@@ -1028,87 +1028,86 @@ document.addEventListener("DOMContentLoaded", async () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          })
+          });
 
           if (!response.ok) {
-            throw new Error("Error al eliminar el servicio")
+            throw new Error("Error al eliminar el servicio");
           }
 
           // Recargar servicios
-          await cargarServicios()
+          await cargarServicios();
 
           Swal.fire({
             icon: "success",
             title: "Éxito",
             text: "El servicio se ha eliminado correctamente.",
-          })
+          });
         } catch (error) {
-          console.error("Error al eliminar el servicio:", error)
+          console.error("Error al eliminar el servicio:", error);
           Swal.fire({
             icon: "error",
             title: "Error",
             text: "No se pudo eliminar el servicio. Por favor, intenta de nuevo más tarde.",
-          })
+          });
         }
       }
-    })
+    });
   }
 
   // Ver detalles del servicio
   function verDetallesServicio(servicioId) {
-    window.location.href = `servicio.html?id=${servicioId}`
+    window.location.href = `servicio.html?id=${servicioId}`;
   }
 
   // Filtrar servicios
   function filtrarServicios(filtro) {
     // Obtener todos los elementos de servicio
-    const servicios = document.querySelectorAll(".service-card")
+    const servicios = document.querySelectorAll(".service-card");
 
     // Iterar sobre cada servicio y mostrar u ocultar según el filtro
     servicios.forEach((servicio) => {
-      const titulo = servicio.querySelector(".service-title").textContent.toLowerCase()
-      const descripcion = servicio.querySelector(".service-description").textContent.toLowerCase()
+      const titulo = servicio.querySelector(".service-title").textContent.toLowerCase();
+      const descripcion = servicio.querySelector(".service-description").textContent.toLowerCase();
 
       if (titulo.includes(filtro) || descripcion.includes(filtro) || filtro === "todos") {
-        servicio.style.display = "block"
+        servicio.style.display = "block";
       } else {
-        servicio.style.display = "none"
+        servicio.style.display = "none";
       }
-    })
+    });
   }
 
   // Generar estrellas según la reputación
   function generarEstrellas(reputacion) {
-    const estrellasLlenas = Math.floor(reputacion)
-    const tieneMediaEstrella = reputacion % 1 !== 0
-    let estrellasHTML = ""
+    const estrellasLlenas = Math.floor(reputacion);
+    const tieneMediaEstrella = reputacion % 1 !== 0;
+    let estrellasHTML = "";
 
     for (let i = 0; i < estrellasLlenas; i++) {
-      estrellasHTML += '<i class="fas fa-star"></i>'
+      estrellasHTML += '<i class="fas fa-star"></i>';
     }
 
     if (tieneMediaEstrella) {
-      estrellasHTML += '<i class="fas fa-star-half-alt"></i>'
+      estrellasHTML += '<i class="fas fa-star-half-alt"></i>';
     }
 
-    const estrellasVacias = 5 - estrellasLlenas - (tieneMediaEstrella ? 1 : 0)
+    const estrellasVacias = 5 - estrellasLlenas - (tieneMediaEstrella ? 1 : 0);
     for (let i = 0; i < estrellasVacias; i++) {
-      estrellasHTML += '<i class="far fa-star"></i>'
+      estrellasHTML += '<i class="far fa-star"></i>';
     }
 
-    return estrellasHTML
+    return estrellasHTML;
   }
 
   // Abrir modal
   function openModal(modalId) {
-    document.getElementById(modalId).classList.add("active")
-    document.body.classList.add("modal-open")
+    document.getElementById(modalId).classList.add("active");
+    document.body.classList.add("modal-open");
   }
 
   // Cerrar modal
   function closeModal(modalId) {
-    document.getElementById(modalId).classList.remove("active")
-    document.body.classList.remove("modal-open")
+    document.getElementById(modalId).classList.remove("active");
+    document.body.classList.remove("modal-open");
   }
- 
 });

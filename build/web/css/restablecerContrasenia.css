@@ -1,0 +1,364 @@
+/* Variables globales */
+:root {
+  --primary-color: #a6d5a8;
+  --primary-dark: #78c091;
+  --primary-light: #b2e3b5;
+  --text-color: #333;
+  --text-light: #666;
+  --white: #ffffff;
+  --border-color: #ddd;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+}
+
+/* Estilos base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Contenedor principal */
+.container {
+  background-color: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Logo */
+.logo {
+  margin-bottom: 25px;
+}
+
+.logo img {
+  max-width: 120px;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  background-color: white;
+  border: 2px solid var(--primary-light);
+  transition: var(--transition);
+}
+
+.logo img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Títulos y textos */
+h2 {
+  color: var(--text-color);
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.registered-email {
+  color: var(--primary-dark);
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.description {
+  color: var(--text-light);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* Formularios */
+form {
+  text-align: left;
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 15px;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 15px;
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(166, 213, 168, 0.2);
+  outline: none;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.requirements {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: -15px;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* Botón */
+.btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(120, 192, 145, 0.4);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+}
+
+/* Estilos específicos para la página de verificación */
+.registered-email {
+  background-color: #f0f7f0;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: inline-block;
+  margin: 15px 0;
+  border-left: 4px solid var(--primary-color);
+}
+
+/* Estilos para mensajes de error */
+.error {
+  color: var(--error-color);
+  font-size: 14px;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+/* Estilos para mensajes de éxito */
+.success {
+  color: var(--success-color);
+  font-size: 14px;
+  margin-top: 15px;
+  display: block;
+}
+
+/* Enlace para volver */
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.back-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.back-link i {
+  margin-right: 5px;
+}
+
+/* Animación para el botón */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(120, 192, 145, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(120, 192, 145, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(120, 192, 145, 0);
+  }
+}
+
+.btn.animated {
+  animation: pulse 2s infinite;
+}
+
+/* Estilos responsivos */
+@media (max-width: 576px) {
+  .container {
+    padding: 30px 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  .logo img {
+    max-width: 100px;
+  }
+}
+
+/* Estilos para el estado de carga */
+.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+}
+
+.loading::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--primary-light);
+  border-top: 3px solid var(--primary-dark);
+  border-radius: 50%;
+  z-index: 1;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Estilos para la verificación de contraseña */
+.password-strength {
+  height: 5px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-top: -15px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.password-strength-bar {
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.strength-weak .password-strength-bar {
+  width: 33%;
+  background-color: #e74c3c;
+}
+
+.strength-medium .password-strength-bar {
+  width: 66%;
+  background-color: #f39c12;
+}
+
+.strength-strong .password-strength-bar {
+  width: 100%;
+  background-color: #2ecc71;
+}
+
+.password-match-indicator {
+  font-size: 12px;
+  margin-top: -15px;
+  margin-bottom: 20px;
+}
+
+.password-match-indicator.match {
+  color: var(--success-color);
+}
+
+.password-match-indicator.no-match {
+  color: var(--error-color);
+}
+
+/* Estilos para mostrar/ocultar contraseña */
+.password-container {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+}
+
+.toggle-password:hover {
+  color: var(--primary-color);
+}

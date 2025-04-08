@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Solidaria - Banco de Tiempo</title>
+    <link rel="shortcut icon" href="img/logo4.png" type="image/x-icon">
+    <link href="css/css.css" rel="stylesheet" type="text/css"/>
+    <link href="css/bancoTiempo.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div id="header-container"></div>
+    
+    <main class="time-bank-container">
+        <div class="time-bank-header">
+            <h1>Banco de Tiempo</h1>
+        </div>
+        
+        <div class="time-bank-stats">
+            <div class="stat-card">
+                <h3>Saldo Actual</h3>
+                <p class="stat-value" id="currentBalance">0.0</p>
+                <p class="stat-description">Horas disponibles para intercambiar</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Horas Recibidas</h3>
+                <p class="stat-value" id="hoursReceived">0.0</p>
+                <p class="stat-description">Total de horas recibidas</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Horas Ofrecidas</h3>
+                <p class="stat-value" id="hoursGiven">0.0</p>
+                <p class="stat-description">Total de horas ofrecidas</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Intercambios Completados</h3>
+                <p class="stat-value" id="completedExchanges">0</p>
+                <p class="stat-description">Número total de intercambios</p>
+            </div>
+        </div>
+        
+        <div class="transactions-container">
+            <div class="transactions-header">
+                <h2>Historial de Transacciones</h2>
+            </div>
+            
+            <div class="filter-controls">
+                <select id="typeFilter">
+                    <option value="all">Todos los tipos</option>
+                    <option value="received">Horas recibidas</option>
+                    <option value="given">Horas ofrecidas</option>
+                </select>
+                
+                <select id="statusFilter">
+                    <option value="all">Todos los estados</option>
+                    <option value="completed">Completados</option>
+                    <option value="pending">Pendientes</option>
+                    <option value="cancelled">Cancelados</option>
+                </select>
+                
+                <input type="date" id="dateFilter" placeholder="Filtrar por fecha">
+                
+                <button id="applyFilters">Aplicar Filtros</button>
+                <button id="resetFilters">Restablecer</button>
+            </div>
+            
+            <div id="transactionsTableContainer">
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Servicio</th>
+                            <th>Tipo</th>
+                            <th>Horas</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody">
+                        <!-- Las transacciones se cargarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+                
+                <div id="emptyTransactions" class="empty-transactions" style="display: none;">
+                    <i class="fas fa-clock"></i>
+                    <h3>No hay transacciones</h3>
+                    <p>Aún no has realizado ningún intercambio de tiempo. Comienza ofreciendo o solicitando servicios.</p>
+                </div>
+            </div>
+            
+            <div class="pagination" id="transactionsPagination">
+                <!-- La paginación se generará dinámicamente -->
+            </div>
+        </div>
+    </main>
+    
+    <div id="footer-container"></div>
+    <script src="js/loaderComponents.js" type="text/javascript"></script>
+    <script src="js/bancoTiempo.js" type="text/javascript"></script>
+</body>
+</html>
