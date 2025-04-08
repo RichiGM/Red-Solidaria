@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Red Solidaria - Mi cuenta</title>
         <link href="css/css.css" rel="stylesheet" type="text/css"/>
+        <link href="css/cuenta.css" rel="stylesheet" type="text/css"/>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     </head>
@@ -14,60 +15,64 @@
             <h1>MI CUENTA</h1>
             <div class="privacy-toggle">
                 <input type="radio" name="privacy" id="public" value="true" checked>
-                <span>Público</span>
+                <label for="public"><i class="fas fa-globe"></i> Público</label>
                 <input type="radio" name="privacy" id="private" value="false">
-                <span>Privado</span>
+                <label for="private"><i class="fas fa-lock"></i> Privado</label>
             </div>         
             <div class="profile-photo">
                 <div class="photo-circle" id="photoCircle"></div>
                 <div class="photo-actions">
-                    <button class="action-btn" id="removePhotoBtn">Quitar la foto</button>
-                    <button class="action-btn" id="changePhotoBtn">Cambiar la foto</button>
+                    <button class="action-btn" id="removePhotoBtn"><i class="fas fa-trash-alt"></i> Quitar la foto</button>
+                    <button class="action-btn" id="changePhotoBtn"><i class="fas fa-camera"></i> Cambiar la foto</button>
                 </div>
             </div>
             <div class="info-section">
                 <div class="form-row">
                     <div class="form-column">
-                        <label for="nombre">Nombre</label>
+                        <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
                         <input type="text" id="nombre" required>
 
-                        <label for="apellidos">Apellidos</label>
+                        <label for="apellidos"><i class="fas fa-user"></i> Apellidos</label>
                         <input type="text" id="apellidos" required>
 
-                        <label for="email">Correo electrónico</label>
+                        <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
                         <input type="email" id="email" required>
 
-                        <button type="button" id="changePasswordBtn">Modificar Contraseña</button>
+                        <button type="button" id="changePasswordBtn"><i class="fas fa-key"></i> Modificar Contraseña</button>
                         <div id="newPasswordContainer" style="display: none;">
-                            <label for="newPassword">Nueva Contraseña</label>
+                            <label for="newPassword"><i class="fas fa-lock"></i> Nueva Contraseña</label>
                             <input type="password" id="newPassword" required>
                             <div class="error" id="newPasswordError"></div>
-                            <button type="button" id="cancelChangeBtn">Cancelar</button>
+                            <button type="button" id="cancelChangeBtn"><i class="fas fa-times"></i> Cancelar</button>
                         </div>
                     </div>
 
                     <div class="form-column">
-                        <label for="state">Estado</label>
+                        <label for="state"><i class="fas fa-map-marker-alt"></i> Estado</label>
                         <select id="state" name="state" required>
                             <option value="">Seleccione un estado</option>
                         </select>
 
-                        <label for="city">Ciudad</label>
+                        <label for="city"><i class="fas fa-city"></i> Ciudad</label>
                         <select id="city" name="city" required>
                             <option value="">Seleccione una ciudad</option>
                         </select>
 
-                        <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion"></textarea>
+                        <label for="descripcion"><i class="fas fa-info-circle"></i> Descripción</label>
+                        <textarea id="descripcion" placeholder="Cuéntanos sobre ti..." rows="4"></textarea>
 
-                        <label for="preferenciasEmail">
+                        <label for="preferenciasEmail" style="display: flex; align-items: center;">
                             <input type="checkbox" id="preferenciasEmail" name="preferenciasEmail">
-                            Recibir notificaciones por Email
+                            <span><i class="fas fa-bell"></i> Recibir notificaciones por Email</span>
                         </label>
                     </div>
                 </div>
+                
+                <!-- Contenedor dedicado para el botón, completamente separado del formulario -->
+                <div class="button-container">
+                    <button class="edit-btn" id="saveChangesBtn"><i class="fas fa-save"></i> Guardar Cambios</button>
+                </div>
 
-                <button class="edit-btn" id="saveChangesBtn">Guardar Cambios</button>
             </div>
         </main>
 

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Red Solidaria - Publicaciones</title>
     <link href="css/css.css" rel="stylesheet" type="text/css"/>
+    <link href="css/publicaciones.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -12,18 +13,21 @@
     <div id="header-container"></div>
     
     <main class="publications-main">
-        <h1>PUBLICACIONES</h1>
+        <div class="publications-header">
+            <h1>Explora Servicios</h1>
+            <p class="subtitle">Descubre servicios ofrecidos por nuestra comunidad</p>
+        </div>
         
         <!-- Sección de búsqueda y filtros -->
         <div class="search-filter-container">
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Buscar por habilidad o palabra clave...">
-                <button id="searchButton"><i class="fas fa-search"></i></button>
+                <button id="searchButton" class="search-btn"><i class="fas fa-search"></i></button>
             </div>
             
             <div class="filter-options">
                 <div class="filter-group">
-                    <label>Modalidad:</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Modalidad:</label>
                     <select id="modalityFilter">
                         <option value="">Todas</option>
                         <option value="1">Presencial</option>
@@ -33,7 +37,7 @@
                 </div>
                 
                 <div class="filter-group">
-                    <label>Ordenar por:</label>
+                    <label><i class="fas fa-sort"></i> Ordenar por:</label>
                     <select id="sortFilter">
                         <option value="recent">Más recientes</option>
                         <option value="rating">Mejor calificados</option>
@@ -41,6 +45,12 @@
                     </select>
                 </div>
             </div>
+        </div>
+        
+        <!-- Loader para indicar carga -->
+        <div id="servicesLoader" class="loader-container">
+            <div class="loader"></div>
+            <p>Cargando servicios...</p>
         </div>
         
         <!-- Contenedor de servicios -->
@@ -80,17 +90,17 @@
                 
                 <div class="service-details">
                     <div class="detail-item">
-                        <h4>Descripción</h4>
+                        <h4><i class="fas fa-info-circle"></i> Descripción</h4>
                         <p id="modalServiceDescription">Descripción del servicio...</p>
                     </div>
                     
                     <div class="detail-item">
-                        <h4>Modalidad</h4>
+                        <h4><i class="fas fa-map-marker-alt"></i> Modalidad</h4>
                         <p id="modalServiceModality">Virtual</p>
                     </div>
                     
                     <div class="detail-item">
-                        <h4>Habilidades</h4>
+                        <h4><i class="fas fa-tags"></i> Habilidades</h4>
                         <div class="tags-container" id="modalServiceTags">
                             <!-- Las etiquetas se generarán dinámicamente -->
                         </div>
@@ -98,8 +108,8 @@
                 </div>
                 
                 <div class="service-actions">
-                    <button class="btn" id="requestServiceBtn">Solicitar servicio</button>
-                    <button class="btn secondary" id="contactProviderBtn">Contactar</button>
+                    <button class="btn primary-btn" id="requestServiceBtn"><i class="fas fa-handshake"></i> Solicitar servicio</button>
+                    <button class="btn secondary-btn" id="contactProviderBtn"><i class="fas fa-comment"></i> Contactar</button>
                 </div>
             </div>
         </div>
@@ -110,4 +120,3 @@
     <script src="js/publicaciones.js" type="text/javascript"></script>
 </body>
 </html>
-

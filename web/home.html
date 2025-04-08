@@ -5,101 +5,46 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Red Solidaria - Inicio</title>
         <link href="css/css.css" rel="stylesheet" type="text/css"/>
+        <link href="css/home.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
         <div id="header-container"></div>
-        <!-- Modal de Chat -->
-        <div id="chatModal" class="modal">
-            <div class="modal-content chat-modal">
-                <span class="close-btn" onclick="closeModalById('chatModal')">×</span>
-                <div class="chat-header">
-                    <h2>Chat</h2>
-                    <input type="text" class="search-chat" placeholder="Buscar chat">
-                </div>
-                <div class="chat-tabs">
-                    <button class="tab active" data-tab="todos">Todos</button>
-                    <button class="tab" data-tab="no-leidos">No leídos</button>
-                    <button class="tab" data-tab="favoritos">Favoritos</button>
-                </div>
-                <div class="chat-list">
-                    <!-- Ejemplo de chats -->
-                    <div class="chat-item" data-user="Nombre de usuario">
-                        <img src="img/usuario.jpg" alt="Usuario" class="user-avatar">
-                        <div class="chat-details">
-                            <p class="user-name">Nombre de usuario</p>
-                            <p class="last-message">Último mensaje</p>
-                        </div>
-                        <span class="chat-time">00:00 00/00</span>
-                        <div class="chat-actions">
-                            <button class="block-btn">Bloquear</button>
-                            <button class="report-btn">Reportar</button>
-                        </div>
-                    </div>
-                    <!-- Más chats pueden añadirse dinámicamente -->
-                </div>
-                <div class="chat-window" style="display: none;">
-                    <div class="chat-header-user">
-                        <img src="img/usuario.jpg" alt="Usuario" class="user-avatar">
-                        <div class="chat-user-details">
-                            <p class="user-name">Nombre de usuario</p>
-                        </div>
-                    </div>
-                    <div class="chat-messages">
-                        <!-- Mensajes se añadirán dinámicamente -->
-                        <div class="message sent">Contenido del mensaje</div>
-                        <div class="message received">Contenido del mensaje</div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" class="message-input" placeholder="Escribe un mensaje...">
-                        <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <main>
-            <div class="featured-section">
-                <div class="featured-item">Lo más destacado</div>
-                <div class="featured-item">Lo más destacado</div>
+            <!-- Banner principal -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1>Bienvenido a Red Solidaria</h1>
+                    <p>Conectamos personas para intercambiar servicios y habilidades</p>
+                    <a href="publicaciones.html" class="explore-btn">
+                        <i class="fas fa-search"></i> Explorar todos los servicios
+                    </a>
+                </div>
             </div>
-            <div class="search-question">
-                <span>¿Estás buscando algo?</span>
+
+            <!-- Servicios destacados -->
+            <div class="section-title">
+                <h2>Servicios destacados</h2>
+                <div class="title-line"></div>
+            </div>
+            <div class="featured-section">
+                <!-- Los servicios destacados se cargarán dinámicamente aquí -->
+            </div>
+            
+            <!-- Usuarios destacados -->
+            <div class="section-title">
+                <h2>Usuarios destacados</h2>
+                <div class="title-line"></div>
             </div>
             <div class="grid-container">
-                <div class="grid-item">
-                    <div class="user-circle"></div>
-                    <p>Nombre usuario</p>
-                    <p>¿Qué ofrece?</p>
-                </div>
-                <div class="grid-item">
-                    <div class="user-circle"></div>
-                    <p>Nombre usuario</p>
-                    <p>¿Qué ofrece?</p>
-                </div>
-                <div class="grid-item">
-                    <div class="user-circle"></div>
-                    <p>Nombre usuario</p>
-                    <p>¿Qué ofrece?</p>
-                </div>
-                <div class="grid-item">
-                    <div class="user-circle"></div>
-                    <p>Nombre usuario</p>
-                    <p>¿Qué ofrece?</p>
-                </div>
-                <div class="grid-item">
-                    <div class="user-circle"></div>
-                    <p>Nombre usuario</p>
-                    <p>¿Qué ofrece?</p>
-                </div>
-                <div class="grid-item">
-                    <div class="user-circle"></div>
-                    <p>Nombre usuario</p>
-                    <p>¿Qué ofrece?</p>
-                </div>
+                <!-- Los usuarios destacados se cargarán dinámicamente aquí -->
             </div>
-             <a href="chat.html">
-    <button class="chat-btn"><i class="fas fa-comments"></i></button>
-</a>
+            
+            <a href="chat.html">
+                <button class="chat-btn"><i class="fas fa-comments"></i></button>
+            </a>
         </main>
 
         <div id="footer-container"></div>
