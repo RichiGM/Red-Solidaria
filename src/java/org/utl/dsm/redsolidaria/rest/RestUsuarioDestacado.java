@@ -13,6 +13,8 @@ import org.utl.dsm.redsolidaria.controller.ControllerUsuarioDestacado;
 public class RestUsuarioDestacado {
 
     private final ControllerUsuarioDestacado usuarioController = new ControllerUsuarioDestacado();
+    private final Gson gson = new Gson(); // Crear una instancia de Gson
+
 
     @GET
     @Path("/destacados")
@@ -38,6 +40,7 @@ public class RestUsuarioDestacado {
         }
     }
 
+
     @GET
     @Path("/obtener-datos-basicos")
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,7 +48,9 @@ public class RestUsuarioDestacado {
         try {
             Map<String, Object> usuario = usuarioController.obtenerDatosBasicosUsuario(idUsuario);
             if (usuario != null) {
-                return Response.ok(usuario).build();
+                // Usar Gson para convertir el mapa a JSON
+                String jsonResponse = gson.toJson(usuario);
+                return Response.ok(jsonResponse).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("Usuario no encontrado").build();
