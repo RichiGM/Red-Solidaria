@@ -1,49 +1,54 @@
 package org.utl.dsm.redsolidaria.rest;
 
-import org.utl.dsm.redsolidaria.model.Transaccion;
-import org.utl.dsm.redsolidaria.controller.ControllerTransaccion;
-import jakarta.websocket.server.PathParam;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import jakarta.ws.rs.QueryParam;
+import org.utl.dsm.redsolidaria.adapters.LocalDateAdapter;
+import org.utl.dsm.redsolidaria.controller.ControllerTransaccion;
+import org.utl.dsm.redsolidaria.model.Transaccion;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.utl.dsm.redsolidaria.model.TransaccionDTO;
 
 @Path("/transaccion")
 public class RestTransaccion {
 
     private final ControllerTransaccion transaccionController = new ControllerTransaccion();
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+            .create();
 
-    // Crear una nueva transacción
-    @POST
-    @Path("/crear")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response crearTransaccion(Transaccion transaccion) {
-        try {
-            transaccionController.crearTransaccion(transaccion);
-            return Response.status(Response.Status.CREATED).entity("Transacción creada exitosamente").build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al crear transacción: " + e.getMessage()).build();
-        }
-    }
-
-    // Obtener todas las transacciones de un usuario
     @GET
     @Path("/usuario/{idUsuario}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTransaccionesPorUsuario(@PathParam("idUsuario") int idUsuario) {
+    public Response getTransaccionesPorUsuario(
+            @PathParam("idUsuario") int idUsuario,
+            @QueryParam("tipo") String tipo,
+            @QueryParam("estado") String estado,
+            @QueryParam("fecha") String fecha) {
         try {
-            List<Transaccion> transacciones = transaccionController.getTransaccionesPorUsuario(idUsuario);
-            return Response.ok(transacciones).build();
+            List<Transaccion> transacciones = transaccionController.getTransaccionesPorUsuario(idUsuario, tipo, estado, fecha);
+
+            List<TransaccionDTO> dtos = new ArrayList<>();
+            for (Transaccion t : transacciones) {
+                dtos.add(TransaccionDTO.fromTransaccion(t));
+            }
+
+            return Response.ok(gson.toJson(dtos))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al obtener transacciones: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\": \"Error al obtener transacciones: " + e.getMessage() + "\"}")
+                    .build();
         }
     }
 }

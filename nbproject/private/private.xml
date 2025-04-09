@@ -3,55 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/publicaciones.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/publicaciones.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/form-transition.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/cuenta.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/misServicios.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/footer.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/home.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/perfilVisitante.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/habilidades.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestTransaccion.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/header.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/index.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/bancoTiempo.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/loaderComponents.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestServicio.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/recuperarContrasenia.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/home.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/bancoTiempo.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/restablecerContrasenia.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/jsPerfil.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/jsPerfil-visitante.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/css.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/home.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/chat.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestFilter.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/intercambios.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/chat.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestLog.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/Cuenta.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/misServicios.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/misServicios.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/recuperarContrasenia.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/bancoTiempo.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestDenuncia.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/perfilPropietario.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestUsuarioDestacado.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/jsChat.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/intercambios.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/crearCuenta.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/restablecerContrasenia.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/restablecerContrasenia.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestUbicacion.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestMensaje.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/js/intercambios.js</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/publicaciones.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestRecuperacion.java</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/registrado.html</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/web/css/cuenta.css</file>
-            <file>file:/C:/Users/Ricardo/Documents/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestUsuario.java</file>
+            <file>file:/C:/Users/velma/Documentos/NetBeansProjects/Red-Solidaria/web/bancoTiempo.html</file>
+            <file>file:/C:/Users/velma/Documentos/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/adapters/LocalDateTimeAdapter.java</file>
+            <file>file:/C:/Users/velma/Documentos/NetBeansProjects/Red-Solidaria/src/java/org/utl/dsm/redsolidaria/rest/RestTransaccion.java</file>
         </group>
     </open-files>
 </project-private>
