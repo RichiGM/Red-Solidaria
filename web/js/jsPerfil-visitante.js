@@ -2,27 +2,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Variables globales
   const BASE_URL = "http://localhost:8080/RedSolidaria/api";
   const token = localStorage.getItem("lastToken");
-  let currentUserId = null;
   let profileUserId = null;
+  let currentUserId = null;
 
   // Elementos DOM
   const profileName = document.querySelector(".profile-name");
   const profileEmail = document.querySelector(".profile-email");
   const profileAvatar = document.querySelector(".photo-circle img");
   const aboutMeText = document.querySelector(".profile-card:nth-child(1) .card-body p");
-  const skillsContainer = document.querySelector(".profile-card:nth-child(2) .skills-container");
+  const skillsContainer = document.querySelector("#skills-container");
   const contactItems = document.querySelectorAll(".profile-card:nth-child(3) .contact-item");
-  const servicesContainer = document.querySelector(".services-container");
-  const contactBtn = document.querySelector(".contact-btn");
-  const viewProfileBtn = document.getElementById("viewProfileBtn");
+  const servicesContainer = document.querySelector("#services-container");
+  const statValues = document.querySelectorAll(".stat-value");
+  const starsContainer = document.querySelector(".stars");
 
   // Inicialización
-  init();
+  await init();
 
   // Función de inicialización
   async function init() {
     try {
-      // Obtener ID del usuario actual
+      // Obtener ID del usuario actual (si está logueado)
       currentUserId = await obtenerIdUsuarioActual();
 
       // Obtener ID del usuario del perfil desde la URL
@@ -42,10 +42,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      // Cargar datos del perfil
+      // Cargar datos del perfil y servicios
       await cargarDatosPerfil();
-
-      // Cargar servicios del usuario
       await cargarServicios();
 
       // Configurar eventos
@@ -55,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Ocurrió un error al cargar el perfil. Por favor, intenta de nuevo más tarde.",
+        text: "Ocurrió un error al cargar el perfil.",
       });
     }
   }
@@ -63,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Obtener ID del usuario actual
   async function obtenerIdUsuarioActual() {
     const email = localStorage.getItem("correo");
-    if (!email) return null;
+    if (!email || !token) return null;
 
     try {
       const response = await fetch(`${BASE_URL}/usuario/obtener-id?email=${email}`, {
@@ -81,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();
       return data.idUsuario;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error al obtener ID del usuario actual:", error);
       return null;
     }
   }
@@ -111,68 +109,52 @@ document.addEventListener("DOMContentLoaded", async () => {
       profileEmail.textContent = usuario.correo || "";
 
       // Actualizar foto de perfil
-      if (usuario.foto) {
-        profileAvatar.src = usuario.foto;
-      } else {
-        profileAvatar.src = "img/usuario.jpg";
-      }
+      profileAvatar.src = usuario.foto || "img/default.jpg";
 
       // Actualizar descripción
-      if (usuario.descripcion) {
-        aboutMeText.textContent = usuario.descripcion;
-      } else {
-        aboutMeText.textContent = "Este usuario no ha añadido una descripción.";
-      }
+      aboutMeText.textContent = usuario.descripcion || "Este usuario no ha añadido una descripción.";
 
       // Actualizar habilidades
+      skillsContainer.innerHTML = "";
       if (usuario.habilidades && usuario.habilidades.length > 0) {
-        skillsContainer.innerHTML = "";
         usuario.habilidades.forEach((habilidad) => {
           const skillTag = document.createElement("span");
-          skillTag.className = "skill-tag";
+          skillTag.className = "skill";
           skillTag.textContent = habilidad.nombre;
           skillsContainer.appendChild(skillTag);
         });
       } else {
-        skillsContainer.innerHTML = "<p>Este usuario no ha añadido habilidades.</p>";
+        skillsContainer.innerHTML = "<p>No hay habilidades registradas.</p>";
       }
 
       // Actualizar información de contacto
       contactItems.forEach((item) => {
         const icon = item.querySelector("i");
         const span = item.querySelector("span");
-
         if (icon.classList.contains("fa-envelope")) {
           span.textContent = usuario.correo || "No disponible";
+        } else if (icon.classList.contains("fa-phone")) {
+          span.textContent = usuario.telefono || "No disponible";
         } else if (icon.classList.contains("fa-map-marker-alt")) {
-          span.textContent =
-            usuario.ciudad && usuario.estado ? `${usuario.ciudad}, ${usuario.estado}` : "No especificada";
+          span.textContent = usuario.ciudad && usuario.estado ? `${usuario.ciudad}, ${usuario.estado}` : "No especificada";
         }
       });
 
       // Actualizar estadísticas
-      document.querySelector(".stat-value:nth-child(1)").textContent = usuario.reputacion
-        ? usuario.reputacion.toFixed(1)
-        : "0.0";
-      document.querySelector(".stat-value:nth-child(2)").textContent = usuario.servicios || "0";
-      document.querySelector(".stat-value:nth-child(3)").textContent = usuario.intercambios || "0";
+      statValues[0].textContent = usuario.reputacion ? usuario.reputacion.toFixed(1) : "0.0";
+      statValues[1].textContent = usuario.servicios || "0";
+      statValues[2].textContent = usuario.intercambios || "0";
 
-      // Generar estrellas según la reputación
-      const starsContainer = document.querySelector(".stars");
+      // Generar estrellas
       starsContainer.innerHTML = generarEstrellas(usuario.reputacion || 0);
 
-      // Verificar si el perfil es del usuario actual
+      // Verificar si es el perfil del usuario actual
       if (currentUserId && currentUserId.toString() === profileUserId) {
-        // Redirigir a perfil propio
         window.location.href = "perfil-propietario.html";
       }
     } catch (error) {
       console.error("Error al cargar datos del perfil:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudieron cargar los datos del perfil. Por favor, intenta de nuevo más tarde.",
-      });
+      servicesContainer.innerHTML = "<p>Error al cargar el perfil.</p>";
     }
   }
 
@@ -193,11 +175,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const servicios = await response.json();
 
-      // Limpiar contenedor de servicios
-      servicesContainer.innerHTML = "";
+      // Limpiar el contenedor (manteniendo el título)
+      servicesContainer.innerHTML = "<h2>Servicios Ofrecidos</h2>";
 
       if (servicios.length === 0) {
-        servicesContainer.innerHTML = `
+        servicesContainer.innerHTML += `
           <div class="empty-services">
             <i class="fas fa-briefcase"></i>
             <h3>Este usuario no tiene servicios publicados</h3>
@@ -209,13 +191,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Renderizar servicios
       servicios.forEach((servicio) => {
-        // Solo mostrar servicios activos
-        if (servicio.estatus !== 1) return;
-
         const servicioElement = document.createElement("div");
         servicioElement.className = "service-card";
 
-        // Determinar la modalidad en texto
+        // Determinar modalidad
         let modalidadTexto = "Desconocida";
         switch (servicio.modalidad) {
           case 1:
@@ -229,6 +208,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             break;
         }
 
+        // Determinar estado
+        const estadoTexto = servicio.estatus === 1 ? "Servicio activo" : "Servicio completado";
+
         servicioElement.innerHTML = `
           <div class="service-header">
             <div class="photo-circle user-avatar-small">
@@ -236,7 +218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
             <div class="service-info">
               <h3 class="service-author">${profileName.textContent}</h3>
-              <span class="service-date">Servicio activo</span>
+              <span class="service-date">${estadoTexto}</span>
             </div>
           </div>
           <div class="service-body">
@@ -244,13 +226,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             <p class="service-description">${servicio.descripcion}</p>
             <div class="service-tags">
               <span class="service-tag">${modalidadTexto}</span>
+              ${servicio.categoria ? `<span class="service-tag">${servicio.categoria}</span>` : ""}
             </div>
           </div>
           <div class="service-footer">
             <div class="service-stats">
               <span class="stat"><i class="fas fa-eye"></i> ${servicio.vistas || 0} vistas</span>
             </div>
-            <button class="btn request-service-btn" data-id="${servicio.idServicio}">Solicitar servicio</button>
+            ${servicio.estatus === 1 ? `
+              <button class="btn request-service-btn" data-id="${servicio.idServicio}">Solicitar servicio</button>
+            ` : ""}
           </div>
         `;
 
@@ -267,6 +252,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error("Error al cargar los servicios:", error);
       servicesContainer.innerHTML = `
+        <h2>Servicios Ofrecidos</h2>
         <div class="error-message">
           <i class="fas fa-exclamation-circle"></i>
           <p>Error al cargar los servicios</p>
@@ -278,30 +264,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Configurar eventos
   function configurarEventos() {
-    // Evento para contactar al usuario
-    contactBtn.addEventListener("click", () => {
-      if (currentUserId) {
-        window.location.href = `chat.html?id=${profileUserId}`;
-      } else {
-        Swal.fire({
-          icon: "info",
-          title: "Iniciar sesión",
-          text: "Debes iniciar sesión para contactar a este usuario.",
-          confirmButtonText: "Iniciar sesión",
-        }).then(() => {
-          window.location.href = "index.html";
-        });
-      }
-    });
-
-    // Eventos para filtros de servicios
-    document.querySelectorAll(".filter-btn").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
-        this.classList.add("active");
-        filtrarServicios(this.textContent.toLowerCase());
-      });
-    });
+    // Aquí podrías agregar más eventos si necesitas, como filtros o botones adicionales
   }
 
   // Solicitar servicio
@@ -337,37 +300,42 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         return { message };
       },
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        // Aquí se implementaría la lógica para enviar la solicitud
-        // Por ahora, solo mostramos un mensaje de éxito
-        Swal.fire({
-          icon: "success",
-          title: "Solicitud enviada",
-          text: "Tu solicitud ha sido enviada. El proveedor se pondrá en contacto contigo pronto.",
-        }).then(() => {
-          // Redirigir al chat con el usuario
-          window.location.href = `chat.html?id=${profileUserId}`;
-        });
-      }
-    });
-  }
+        try {
+          // Aquí iría una llamada a la API para enviar la solicitud (ejemplo ficticio)
+          const response = await fetch(`${BASE_URL}/solicitud/crear`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              idServicio: servicioId,
+              idUsuarioSolicitante: currentUserId,
+              mensaje: result.value.message,
+            }),
+          });
 
-  // Filtrar servicios
-  function filtrarServicios(filtro) {
-    const servicios = document.querySelectorAll(".service-card");
+          if (!response.ok) {
+            throw new Error("Error al enviar la solicitud");
+          }
 
-    if (servicios.length === 0) return;
-
-    servicios.forEach((servicio) => {
-      if (filtro === "todos") {
-        servicio.style.display = "block";
-      } else if (filtro === "activos") {
-        // Asumimos que todos los servicios mostrados son activos
-        servicio.style.display = "block";
-      } else if (filtro === "completados") {
-        // No tenemos servicios completados en esta vista
-        servicio.style.display = "none";
+          Swal.fire({
+            icon: "success",
+            title: "Solicitud enviada",
+            text: "Tu solicitud ha sido enviada. El proveedor se pondrá en contacto contigo pronto.",
+          }).then(() => {
+            window.location.href = `chat.html?id=${profileUserId}`;
+          });
+        } catch (error) {
+          console.error("Error al enviar solicitud:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo enviar la solicitud. Intenta de nuevo más tarde.",
+          });
+        }
       }
     });
   }
@@ -379,40 +347,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
     let starsHTML = "";
-
-    // Estrellas completas
     for (let i = 0; i < fullStars; i++) {
       starsHTML += '<i class="fas fa-star"></i>';
     }
-
-    // Media estrella si corresponde
     if (halfStar) {
       starsHTML += '<i class="fas fa-star-half-alt"></i>';
     }
-
-    // Estrellas vacías
     for (let i = 0; i < emptyStars; i++) {
       starsHTML += '<i class="far fa-star"></i>';
     }
-
     return starsHTML;
   }
-
-  // Función para abrir modales
-  window.openModal = (modalId) => {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.style.display = "block";
-      document.body.classList.add("modal-open");
-    }
-  };
-
-  // Función para cerrar modales
-  window.closeModal = (modalId) => {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.style.display = "none";
-      document.body.classList.remove("modal-open");
-    }
-  };
 });
