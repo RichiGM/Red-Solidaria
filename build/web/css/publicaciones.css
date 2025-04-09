@@ -642,3 +642,35 @@ body.modal-open {
     height: 35px;
   }
 }
+.hours-selection-modal {
+    max-width: 400px;
+    padding: 20px;
+}
+
+.hours-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.hours-input-container input {
+    width: 100px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.modal-body .note {
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}

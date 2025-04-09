@@ -115,6 +115,27 @@
             </div>
         </div>
     </div>
+    <!-- Modal para seleccionar horas -->
+<div id="hoursSelectionModal" class="modal">
+    <div class="modal-content hours-selection-modal">
+        <span class="close-btn" onclick="closeModalById('hoursSelectionModal')">×</span>
+        <div class="modal-header">
+            <h2>Solicitar Servicio</h2>
+        </div>
+        <div class="modal-body">
+            <p>¿Cuántas horas estás dispuesto a ofrecer por este servicio?</p>
+            <div class="hours-input-container">
+                <input type="number" id="hoursInput" min="1" max="100" step="0.5" value="1">
+                <span>horas</span>
+            </div>
+            <p class="note">Nota: El proveedor debe aceptar la cantidad de horas propuesta.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn" id="confirmHoursBtn"><i class="fas fa-check"></i> Confirmar</button>
+            <button class="btn secondary-btn" onclick="closeModalById('hoursSelectionModal')"><i class="fas fa-times"></i> Cancelar</button>
+        </div>
+    </div>
+</div>
 
     <div id="footer-container"></div>
     <script src="js/loaderComponents.js" type="text/javascript"></script>
